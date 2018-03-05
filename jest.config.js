@@ -20,11 +20,10 @@ module.exports = {
     "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
   },
   testRegex: "/tests/.*\\.(ts|tsx|js)$",
-  mapCoverage: true,
   coveragePathIgnorePatterns: [
     '/node_modules/',
     'src/index.ts',
-    'src/config',
-    'src/lib/base.*'
+    'src/lib/errorConfig.ts',
+    'src/lib/constants.ts'
   ],
 };

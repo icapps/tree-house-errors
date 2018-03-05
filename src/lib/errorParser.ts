@@ -1,14 +1,14 @@
 import * as ev from 'express-validation';
-import { ErrorSerializer } from 'jsonade';
-import { errors, ApiError, ValidationError } from './errors';
+import { ApiError, ValidationError } from './errors';
+import { errorConfig as errors } from './errorConfig';
 import { errorDefaults } from './constants';
 
-export function handleErrors(error: any) {
+export function parseErrors(error: any) {
   let parsedError = new ApiError(errorDefaults.DEFAULT_HTTP_CODE, errorDefaults.DEFAULT_ERROR); // Default error
 
   // Express middleware validation errors
   if (error instanceof ev.ValidationError) {
-    parsedError = new ValidationError(errors.VALIDATION_ERROR, {
+    parsedError = new ValidationError(errors.INVALID_INPUT, {
       detail: error.errors,
     });
   }
@@ -18,19 +18,12 @@ export function handleErrors(error: any) {
     parsedError = error;
   }
 
-  const serializerError = {
+  // Return object easy to use for serialisation
+  return {
     status: parsedError.status,
     code: parsedError.code,
     title: parsedError.message,
     detail: parsedError.detail || parsedError.message,
-    stack: undefined,
+    stack: error instanceof Error ? parsedError.stack : undefined, // At least add stacktrace for unknown errors
   };
-
-  // Only log stacktrace when in debug mode
-  if (process.env.LOG_LEVEL === 'debug' && parsedError instanceof Error) {
-    serializerError.stack = parsedError.stack;
-  }
-
-  // Return and serialize the error output
-  return ErrorSerializer.serialize([serializerError]);
 }

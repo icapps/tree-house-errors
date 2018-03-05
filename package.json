@@ -4,8 +4,8 @@
   "description": "Tree House Errors module",
   "main": "./build/index.js",
   "scripts": {
-    "cleanup": "rm -rf ./build/*",
-    "build": "yarn cleanup && tsc",
+    "clean": "rimraf ./build",
+    "build": "yarn clean && tsc",
     "start": "node ./build/index.js",
     "serve": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/index.ts",
     "lint": "tslint 'src/**/*.ts'",
@@ -18,23 +18,29 @@
   "precommit": [
     "lint"
   ],
+  "dependencies": {
+    "express-validation": "~1.0.2",
+    "http-status": "~1.0.1",
+    "uuid": "~3.2.1"
+  },
   "devDependencies": {
-    "@types/node": "^8.0.47",
-    "jest": "^21.2.1",
-    "nodemon": "^1.12.1",
+    "@types/http-status": "^0.2.30",
+    "@types/jest": "^22.1.4",
+    "jest": "^22.1.4",
+    "nodemon": "^1.17.1",
     "pre-commit": "^1.2.2",
     "supertest": "^3.0.0",
-    "ts-jest": "^21.1.4",
-    "ts-node": "^3.0.6",
-    "tslint": "^5.8.0",
-    "tslint-config-airbnb": "^5.3.0",
-    "typescript": "^2.6.0"
+    "rimraf": "^2.6.2",
+    "ts-jest": "^22.4.1",
+    "tslint": "^5.9.1",
+    "tslint-config-airbnb": "^5.7.0",
+    "typescript": "^2.7.2"
   },
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=6.0.0"
   },
   "directories": {
-    "test": "test"
+    "test": "tests"
   },
   "keywords": [
     "tree House",
@@ -47,11 +53,5 @@
   "bugs": {
     "url": "https://github.com/icapps/tree-house-errors/issues"
   },
-  "homepage": "https://github.com/icapps/tree-house-errors#readme",
-  "dependencies": {
-    "express-validation": "^1.0.2",
-    "http-status": "^1.0.1",
-    "jsonade": "^1.1.0",
-    "uuid": "^3.2.1"
-  }
+  "homepage": "https://github.com/icapps/tree-house-errors#readme"
 }
