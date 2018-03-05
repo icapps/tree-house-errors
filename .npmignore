@@ -1,0 +1,35 @@
+# Source code and examples
+src/
+examples
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Editor
+.editorconfig
+.vscode
+
+# Typescript
+tsconfig.json
+
+# Linter
+tslint.json
+
+# Testing and coverage
+test
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# NPM
+.npm
+.npmignore
+package-lock.json
+
+# Yarn
+.yarnclean
+.yarnrc
+yarn.lock
+yarn-error.log
