@@ -1,4 +1,5 @@
-import { parseErrors, ApiError } from '../src';
+import * as httpStatus from 'http-status';
+import { parseErrors, ApiError, errors } from '../src';
 import { errorDefaults } from '../src/lib/constants';
 
 describe('errorParser', () => {
@@ -12,9 +13,11 @@ describe('errorParser', () => {
         code: defaultError.code,
         title: defaultError.message,
         detail: defaultError.message,
-        stack: undefined, // At least add stacktrace for unknown errors
+        stack: undefined,
       });
     });
+
+    // TODO: Other custom errors extending from Error
   });
 
   describe('Express Validation errors', () => {
@@ -22,6 +25,20 @@ describe('errorParser', () => {
   });
 
   describe('Predefined Api errors', () => {
+    it('Should succesfully parse default ApiError', () => {
+      try {
+        throw new ApiError(httpStatus.BAD_REQUEST, errors.INVALID_INPUT);
+      } catch (err) {
+        const parsedError = parseErrors(err);
+        expect(parsedError).toMatchObject({
+          status: httpStatus.BAD_REQUEST,
+          code: errors.INVALID_INPUT.code,
+          title: errors.INVALID_INPUT.message,
+          detail: errors.INVALID_INPUT.message,
+        });
+      }
+    });
 
+    // TODO: Custom cases
   });
 });
