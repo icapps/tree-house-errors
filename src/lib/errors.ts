@@ -12,7 +12,7 @@ export class ApiError extends Error {
     const { message, detail, stack } = args;
     super(message || error.message);
     this.name = 'ApiError';
-    this.id = uuid();
+    this.id = uuid.v1();
     this.code = error.code;
     this.status = status;
     this.detail = detail;
