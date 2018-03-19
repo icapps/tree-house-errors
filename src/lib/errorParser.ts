@@ -20,10 +20,11 @@ export function parseErrors(error: any) {
 
   // Return object easy to use for serialisation
   return {
+    id: parsedError.id,
     status: parsedError.status,
     code: parsedError.code,
     title: parsedError.message,
     detail: parsedError.detail || parsedError.message,
-    stack: error instanceof Error ? parsedError.stack : undefined, // At least add stacktrace for unknown errors
+    meta: error instanceof Error ? { stack: parsedError.stack } : undefined, // At least add stacktrace for unknown errors
   };
 }
