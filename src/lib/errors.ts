@@ -64,7 +64,7 @@ export class ValidationError extends ApiError {
 
 export class AuthenticationError extends ApiError {
   constructor(error?: ErrorType, args?: ErrorArgs) {
-    super(httpStatus.BAD_REQUEST, error == null ? errors.BAD_REQUEST : error, args);
+    super(httpStatus.BAD_REQUEST, error == null ? errors.AUTHENTICATION_FAILED : error, args);
     this.name = 'AuthenticationError';
   }
 }
