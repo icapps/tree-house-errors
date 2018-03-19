@@ -2,7 +2,8 @@
   "name": "tree-house-errors",
   "version": "1.0.0",
   "description": "NodeJS default error definitions with an error parser utility function",
-  "main": "./build/index.js",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
   "scripts": {
     "clean": "rimraf ./build",
     "build": "yarn clean && tsc",
@@ -24,17 +25,16 @@
   },
   "devDependencies": {
     "@types/http-status": "~0.2.30",
-    "@types/jest": "~22.1.4",
+    "@types/jest": "~22.2.0",
     "@types/uuid": "~3.4.3",
     "coveralls": "^3.0.0",
     "jest": "^22.1.4",
-    "nodemon": "^1.17.1",
     "pre-commit": "^1.2.2",
     "rimraf": "^2.6.2",
     "supertest": "^3.0.0",
-    "ts-jest": "^22.4.1",
+    "ts-jest": "^22.4.2",
     "tslint": "^5.9.1",
-    "tslint-config-airbnb": "^5.7.0",
+    "tslint-config-airbnb": "^5.8.0",
     "typescript": "^2.7.2"
   },
   "engines": {

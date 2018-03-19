@@ -1,4 +1,5 @@
 import * as httpStatus from 'http-status';
+import { ValidationError } from 'express-validation';
 import { parseErrors, ApiError, errors } from '../src';
 import { errorDefaults } from '../src/lib/constants';
 
@@ -21,7 +22,20 @@ describe('errorParser', () => {
   });
 
   describe('Express Validation errors', () => {
+    const options = {
+      flatten: false,
+      status: 400,
+      statusText: 'Validation...',
+    };
 
+    const expressValidationError = new ValidationError([{ name: 'myField' }], options);
+    const parsedError = parseErrors(expressValidationError);
+    expect(parsedError).toMatchObject({
+      status: httpStatus.BAD_REQUEST,
+      code: errors.INVALID_INPUT.code,
+      title: errors.INVALID_INPUT.message,
+      detail: [{ name: 'myField' }],
+    });
   });
 
   describe('Predefined Api errors', () => {
