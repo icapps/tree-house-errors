@@ -10,11 +10,12 @@ describe('errorParser', () => {
     it('Should return the default error when unknown object is passed', () => {
       const parsedError = parseErrors({ myProp: 'iDunno' });
       expect(parsedError).toMatchObject({
+        id: expect.any(String),
         status: defaultError.status,
         code: defaultError.code,
         title: defaultError.message,
         detail: defaultError.message,
-        stack: undefined,
+        meta: undefined,
       });
     });
 
@@ -31,6 +32,7 @@ describe('errorParser', () => {
     const expressValidationError = new ValidationError([{ name: 'myField' }], options);
     const parsedError = parseErrors(expressValidationError);
     expect(parsedError).toMatchObject({
+      id: expect.any(String),
       status: httpStatus.BAD_REQUEST,
       code: errors.INVALID_INPUT.code,
       title: errors.INVALID_INPUT.message,
@@ -45,6 +47,7 @@ describe('errorParser', () => {
       } catch (err) {
         const parsedError = parseErrors(err);
         expect(parsedError).toMatchObject({
+          id: expect.any(String),
           status: httpStatus.BAD_REQUEST,
           code: errors.INVALID_INPUT.code,
           title: errors.INVALID_INPUT.message,
