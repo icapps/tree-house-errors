@@ -1,13 +1,12 @@
 {
   "name": "tree-house-errors",
   "version": "1.0.0",
-  "description": "Tree House Errors module",
-  "main": "./build/index.js",
+  "description": "NodeJS default error definitions with an error parser utility function",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
   "scripts": {
-    "cleanup": "rm -rf ./build/*",
-    "build": "yarn cleanup && tsc",
-    "start": "node ./build/index.js",
-    "serve": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/index.ts",
+    "clean": "rimraf ./build",
+    "build": "yarn clean && tsc",
     "lint": "tslint 'src/**/*.ts'",
     "test": "jest --forceExit",
     "test:coverage": "jest --coverage --collectCoverageFrom=src/**/*.ts --forceExit",
@@ -18,40 +17,51 @@
   "precommit": [
     "lint"
   ],
+  "dependencies": {
+    "express-validation": "~1.0.2",
+    "http-status": "~1.0.1",
+    "joi": "~13.1.2",
+    "uuid": "~3.2.1"
+  },
   "devDependencies": {
-    "@types/node": "^8.0.47",
-    "jest": "^21.2.1",
-    "nodemon": "^1.12.1",
+    "@types/http-status": "~0.2.30",
+    "@types/jest": "~22.2.0",
+    "@types/uuid": "~3.4.3",
+    "coveralls": "^3.0.0",
+    "jest": "^22.1.4",
     "pre-commit": "^1.2.2",
+    "rimraf": "^2.6.2",
     "supertest": "^3.0.0",
-    "ts-jest": "^21.1.4",
-    "ts-node": "^3.0.6",
-    "tslint": "^5.8.0",
-    "tslint-config-airbnb": "^5.3.0",
-    "typescript": "^2.6.0"
+    "ts-jest": "^22.4.2",
+    "tslint": "^5.9.1",
+    "tslint-config-airbnb": "^5.8.0",
+    "typescript": "^2.7.2"
   },
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=6.0.0"
   },
+  "contributors": [
+    {
+      "name": "Willem Horsten",
+      "email": "willem.horsten@icapps.com"
+    },
+    {
+      "name": "Brent Van Geertruy",
+      "email": "brent.vangeertruy@icapps.com"
+    }
+  ],
   "directories": {
-    "test": "test"
+    "test": "tests"
   },
   "keywords": [
     "tree House",
     "treehouse",
     "errors"
   ],
-  "author": "Brent Van Geertruy <brentvangeertruy@outlook.com>",
   "license": "MIT",
   "repository": "git@github.com:icapps/tree-house-errors.git",
   "bugs": {
     "url": "https://github.com/icapps/tree-house-errors/issues"
   },
-  "homepage": "https://github.com/icapps/tree-house-errors#readme",
-  "dependencies": {
-    "express-validation": "^1.0.2",
-    "http-status": "^1.0.1",
-    "jsonade": "^1.1.0",
-    "uuid": "^3.2.1"
-  }
+  "homepage": "https://github.com/icapps/tree-house-errors#readme"
 }

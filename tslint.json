@@ -14,7 +14,11 @@
       "ban-keywords",
       "check-format",
       "allow-leading-underscore"
-   ],
-   "align": [true, "parameters", "statements"]
+    ],
+    "align": [
+      true,
+      "parameters",
+      "statements"
+    ]
   }
 }
