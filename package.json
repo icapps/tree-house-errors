@@ -58,7 +58,7 @@
     "treehouse",
     "errors"
   ],
-  "license": "MIT",
+  "license": "ISC",
   "repository": "git@github.com:icapps/tree-house-errors.git",
   "bugs": {
     "url": "https://github.com/icapps/tree-house-errors/issues"
