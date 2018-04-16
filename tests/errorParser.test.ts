@@ -22,6 +22,27 @@ describe('errorParser', () => {
     // TODO: Other custom errors extending from Error
   });
 
+
+  describe('Knex.js errors', () => {
+    const error = new Error('Some error...');
+    Object.assign(error, { stack: 'myStack', detail: 'some details', schema: 'public' });
+
+    const parsedError = parseErrors(error);
+    expect(parsedError).toMatchObject({
+      id: expect.any(String),
+      status: defaultError.status,
+      code: defaultError.code,
+      title: defaultError.message,
+      detail: defaultError.message,
+      meta: {
+        stack: JSON.stringify('myStack'),
+        detail: 'some details',
+        schema: 'public',
+      },
+    });
+
+  });
+
   describe('Express Validation errors', () => {
     const options = {
       flatten: false,
