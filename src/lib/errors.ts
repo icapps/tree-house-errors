@@ -16,7 +16,7 @@ export class ApiError extends Error {
     this.code = error.code;
     this.status = status;
     this.detail = detail;
-    if (stack) this.stack = JSON.stringify(stack);
+    if (stack) this.stack = stack;
   }
 }
 
