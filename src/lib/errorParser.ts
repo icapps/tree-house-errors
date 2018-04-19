@@ -2,8 +2,9 @@ import * as ev from 'express-validation';
 import { ApiError, ValidationError } from './errors';
 import { errorConfig as errors } from './errorConfig';
 import { errorDefaults } from './constants';
+import i18n from './i18nConfig';
 
-export function parseErrors(error: any) {
+export function parseErrors(error: any, language: string) {
   const metaData: any = {};
   let parsedError = new ApiError(errorDefaults.DEFAULT_HTTP_CODE, errorDefaults.DEFAULT_ERROR); // Default error
 
@@ -25,7 +26,14 @@ export function parseErrors(error: any) {
 
   // Own thrown ApiErrors
   if (error instanceof ApiError) {
-    parsedError = error;
+    i18n.setLocale(language);
+
+    let correctMessage = i18n.__(error.code);
+    // if translation is not found, return default English message
+    if (correctMessage === error.code) {
+      correctMessage = error.message;
+    }
+    parsedError = Object.assign({}, error, { message: correctMessage });
   }
 
   // Return object easy to use for serialisation

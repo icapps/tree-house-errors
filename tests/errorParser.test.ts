@@ -8,7 +8,7 @@ describe('errorParser', () => {
 
   describe('Unkown errors', () => {
     it('Should return the default error when unknown object is passed', () => {
-      const parsedError = parseErrors({ myProp: 'iDunno' });
+      const parsedError = parseErrors({ myProp: 'iDunno' }, 'en');
       expect(parsedError).toMatchObject({
         id: expect.any(String),
         status: defaultError.status,
@@ -27,7 +27,7 @@ describe('errorParser', () => {
     const error = new Error('Some error...');
     Object.assign(error, { stack: 'myStack', detail: 'some details', schema: 'public' });
 
-    const parsedError = parseErrors(error);
+    const parsedError = parseErrors(error, 'en');
     expect(parsedError).toMatchObject({
       id: expect.any(String),
       status: defaultError.status,
@@ -51,7 +51,7 @@ describe('errorParser', () => {
     };
 
     const expressValidationError = new ValidationError([{ name: 'myField' }], options);
-    const parsedError = parseErrors(expressValidationError);
+    const parsedError = parseErrors(expressValidationError, 'en');
     expect(parsedError).toMatchObject({
       id: expect.any(String),
       status: httpStatus.BAD_REQUEST,
@@ -66,7 +66,7 @@ describe('errorParser', () => {
       try {
         throw new ApiError(httpStatus.BAD_REQUEST, errors.INVALID_INPUT);
       } catch (err) {
-        const parsedError = parseErrors(err);
+        const parsedError = parseErrors(err, 'en');
         expect(parsedError).toMatchObject({
           id: expect.any(String),
           status: httpStatus.BAD_REQUEST,
