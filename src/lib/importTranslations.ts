@@ -5,16 +5,12 @@ const defaultOptions = {
   destination: './lib/locales',
 };
 
-export function importTranslations(token: string, options?: Options) {
-  try {
-    const allOptions = Object.assign({}, defaultOptions, options);
-    return icappsTranslation.import(url, token, allOptions);
-  } catch (ex) {
-    throw ex;
-  }
+export function importTranslations(token: string, options?: TranslationOptions) {
+  const allOptions = Object.assign({}, defaultOptions, options);
+  return icappsTranslation.import(url, token, allOptions);
 }
 
-export interface Options {
+export interface TranslationOptions {
   destination?: string;
   clean?: boolean;
   verbose?: boolean;
