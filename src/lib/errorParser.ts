@@ -11,6 +11,7 @@ export function parseErrors(error: any, language?: string) {
   // Other errors
   if (error instanceof Error) {
     Object.assign(metaData, { stack: JSON.stringify(error.stack) });
+
     if (error.hasOwnProperty('schema') && error.hasOwnProperty('detail')) { // knex.js specific errors
       const errorData = <any>error;
       Object.assign(metaData, errorData);
