@@ -5,6 +5,7 @@ import { errorConfig as errors } from './errorConfig';
 export class ApiError extends Error {
   code: string;
   status: number;
+  i18n?: string;
   id?: string;
   detail?: string;
 
@@ -14,6 +15,7 @@ export class ApiError extends Error {
     this.name = 'ApiError';
     this.id = uuid.v1();
     this.code = error.code;
+    this.i18n = error.i18n;
     this.status = status;
     this.detail = detail;
     if (stack) this.stack = stack;
@@ -73,6 +75,7 @@ export class AuthenticationError extends ApiError {
 export interface ErrorType {
   code: string;
   message: string;
+  i18n?: string;
 }
 
 export interface ErrorArgs {

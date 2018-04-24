@@ -143,6 +143,16 @@ const parsedError = parseErrors(error);
 serializer.serialize([parsedError]);
 ```
 
+## Import translations
+
+Import new or updated translations from the iCapps translation portal
+
+```javascript
+  import { importTranslations } from 'tree-house-errors';
+
+  await importTranslations('applicationToken');
+```
+
 ## Tests
 
 - You can run `yarn test` to run all tests
