@@ -1,12 +1,18 @@
-import * as httpStatus from 'http-status';
 import { ValidationError } from 'express-validation';
-import { parseErrors, ApiError, errors } from '../src';
+import * as httpStatus from 'http-status';
+import * as icappsTranslation from 'icapps-translations';
+import { ApiError, errors, parseErrors, importTranslations } from '../src';
 import { errorDefaults } from '../src/lib/constants';
 import * as i18n from 'i18n';
 
 describe('errorParser', () => {
   const defaultError = new ApiError(errorDefaults.DEFAULT_HTTP_CODE, errorDefaults.DEFAULT_ERROR);
   let i18nMock;
+  jest.spyOn(icappsTranslation, 'import').mockImplementation(() => { });
+
+  beforeAll(async () => {
+    await importTranslations('randomToken');
+  });
 
   beforeEach(() => {
     i18nMock = jest.spyOn(i18n, '__');
@@ -86,6 +92,20 @@ describe('errorParser', () => {
           code: errors.INVALID_INPUT.code,
           title: errorTranslation,
           detail: errorTranslation,
+        });
+      }
+    });
+    it('Should succesfully parse default ApiError without an i18n key', () => {
+      try {
+        throw new ApiError(httpStatus.BAD_REQUEST, errors.INVALID_INPUT);
+      } catch (err) {
+        const parsedError = parseErrors(err);
+        expect(parsedError).toMatchObject({
+          id: expect.any(String),
+          status: httpStatus.BAD_REQUEST,
+          code: errors.INVALID_INPUT.code,
+          title: errors.INVALID_INPUT.message,
+          detail: errors.INVALID_INPUT.message,
         });
       }
     });

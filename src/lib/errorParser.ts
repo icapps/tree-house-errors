@@ -4,7 +4,7 @@ import { errorConfig as errors } from './errorConfig';
 import { errorDefaults } from './constants';
 import i18n from './i18nConfig';
 
-export function parseErrors(error: any, language?: string) {
+export function parseErrors(error: any, language: string = 'en') {
   const metaData: any = {};
   let parsedError = new ApiError(errorDefaults.DEFAULT_HTTP_CODE, errorDefaults.DEFAULT_ERROR); // Default error
 
@@ -30,8 +30,8 @@ export function parseErrors(error: any, language?: string) {
     i18n.setLocale(language);
 
     let translatedMessage = i18n.__(error.i18n);
-    // if the translatedMessage equals the error code or is undefined
-    // no translation is found
+    // if the translatedMessage equals the error code
+    // OR is undefined because not found
     // fallback to default error message from ErrorConfig
     if (translatedMessage === error.i18n || translatedMessage === undefined) {
       translatedMessage = error.message;
