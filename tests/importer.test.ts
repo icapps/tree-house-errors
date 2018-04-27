@@ -14,7 +14,7 @@ describe('importTranslations', () => {
   });
 
   it('should import the translations', async () => {
-    await importTranslations('randomToken');
+    await importTranslations('http://test.be', 'randomToken');
     expect(icappsTranslationMock).toHaveBeenCalledTimes(1);
     rmdirSync('./locales'); // cleanup
   });
@@ -24,7 +24,7 @@ describe('importTranslations', () => {
     mkdirSync(newDestination);
     expect(existsSync(newDestination)).toEqual(true);
 
-    await importTranslations('randomToken', { destination: newDestination });
+    await importTranslations('http://test.be', 'randomToken', { destination: newDestination });
     expect(icappsTranslationMock).toHaveBeenCalledTimes(1);
 
     // cleanup
@@ -34,7 +34,7 @@ describe('importTranslations', () => {
   it('should create the locales directory if not exists', async () => {
     const newDestination = './tests/locales';
 
-    await importTranslations('randomToken', { destination: newDestination });
+    await importTranslations('http://test.be', 'randomToken', { destination: newDestination });
     expect(icappsTranslationMock).toHaveBeenCalledTimes(1);
     expect(existsSync(newDestination)).toEqual(true);
 
