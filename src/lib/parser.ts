@@ -1,8 +1,8 @@
 import * as ev from 'express-validation';
 import { ApiError, ValidationError } from './errors';
-import { errorConfig as errors } from './errorConfig';
-import { errorDefaults } from './constants';
-import i18n from './i18nConfig';
+import { errors } from '../config/errors.config';
+import { errorDefaults } from '../config/defaults.config';
+import { translator } from './translator';
 
 export function parseErrors(error: any, language: string = 'en') {
   const metaData: any = {};
@@ -27,9 +27,9 @@ export function parseErrors(error: any, language: string = 'en') {
 
   // Own thrown ApiErrors
   if (error instanceof ApiError) {
-    i18n.setLocale(language);
+    translator.setLocale(language);
 
-    let translatedMessage = i18n.__(error.i18n);
+    let translatedMessage = translator.__(error.i18n);
     // if the translatedMessage equals the error code
     // OR is undefined because not found
     // fallback to default error message from ErrorConfig

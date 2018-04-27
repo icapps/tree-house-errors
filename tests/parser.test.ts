@@ -2,8 +2,8 @@ import { ValidationError } from 'express-validation';
 import * as httpStatus from 'http-status';
 import * as icappsTranslation from 'icapps-translations';
 import { ApiError, errors, parseErrors, importTranslations } from '../src';
-import { errorDefaults } from '../src/lib/constants';
-import * as i18n from 'i18n';
+import { errorDefaults } from '../src/config/defaults.config';
+import { translator } from '../src/lib/translator';
 
 describe('errorParser', () => {
   const defaultError = new ApiError(errorDefaults.DEFAULT_HTTP_CODE, errorDefaults.DEFAULT_ERROR);
@@ -15,7 +15,7 @@ describe('errorParser', () => {
   });
 
   beforeEach(() => {
-    i18nMock = jest.spyOn(i18n, '__');
+    i18nMock = jest.spyOn(translator, '__');
   });
 
   afterEach(() => {

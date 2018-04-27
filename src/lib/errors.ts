@@ -1,6 +1,6 @@
 import * as uuid from 'uuid';
 import * as httpStatus from 'http-status';
-import { errorConfig as errors } from './errorConfig';
+import { errors } from '../config/errors.config';
 
 export class ApiError extends Error {
   code: string;
