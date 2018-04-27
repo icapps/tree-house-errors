@@ -4,6 +4,9 @@ import { existsSync, mkdirSync } from 'fs';
 const url = '';
 const defaultOptions = {
   destination: process.cwd() + '/locales',
+  clean: true,
+  seperateCategories: false,
+  exportType: 'json',
 };
 
 export async function importTranslations(token: string, options?: TranslationOptions) {

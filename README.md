@@ -131,7 +131,7 @@ throw new ApiError(400, errors.BAD_REQUEST);
 
 ## Error parsing
 
-### parseErrors(error)
+### parseErrors(error, i18nOptions (optional))
 
 Parse any data into an error object with all properties needed for jsonade parser. Also parses `express-validation` errors.
 
@@ -143,6 +143,22 @@ const parsedError = parseErrors(error);
 serializer.serialize([parsedError]);
 ```
 
+With i18n support (optional):
+
+```javascript
+const error = new BadRequestError(...);
+const parsedError = parseErrors(error, {
+  defaultLocale: 'en',          // Optional (defaults to 'en')
+  language: 'nl',               // Optional (defaults to 'en')
+  path: __dirname = '/locales',
+});
+
+// jsonade serializer afterwards (optional)
+serializer.serialize([parsedError]);
+```
+
+> The `parseErrors` function will load the i18n configuration once, and reuse the same instance afterwards. It is not possible to overwrite the configuration after the first call. This has to do with performance and caching of translations.
+
 ## Import translations
 
 Import new or updated translations from the iCapps translation portal
@@ -150,8 +166,16 @@ Import new or updated translations from the iCapps translation portal
 ```javascript
   import { importTranslations } from 'tree-house-errors';
 
-  await importTranslations('applicationToken');
+  await importTranslations('applicationToken', {
+    destination: __dirname + '/locales'
+    clean: false,               // Optional (default to true)
+    verbose: true,              // Optional (defaults to false)
+    seperateCategories: false,  // Optional (defaults to true)
+    exportType: 'plist',        // Optional (defaults to 'json')
+  });
 ```
+
+- [more info about the icapps translations module used to import translations](https://github.com/icapps/js-translations)
 
 ## Tests
 
