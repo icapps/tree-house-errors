@@ -1,4 +1,4 @@
-export { parseErrors } from './lib/parser';
+export { parseErrors, I18nOptions } from './lib/parser';
 export { errors } from './config/errors.config';
 export { importTranslations, TranslationOptions } from './lib/importer';
 export * from './lib/errors';
