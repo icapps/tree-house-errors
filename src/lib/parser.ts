@@ -27,20 +27,20 @@ export function parseErrors(error: any, i18n?: I18nOptions) {
 
   // Own thrown ApiErrors
   if (error instanceof ApiError) {
-    let translatedMessage = error.i18n; // TODO: Weird stuff??
+    let translatedMessage = error.message;
 
     if (i18n) {
       const translator = getTranslator(i18n.path, i18n.defaultLocale);
       translator.setLocale(i18n.language);
       translatedMessage = translator.__(error.i18n);
+
+      // if the translatedMessage equals the error code OR is undefined because not found
+      // fallback to default error message from errors
+      if (translatedMessage === error.i18n || translatedMessage === undefined) {
+        translatedMessage = error.message;
+      }
     }
 
-    // if the translatedMessage equals the error code
-    // OR is undefined because not found
-    // fallback to default error message from ErrorConfig
-    if (translatedMessage === error.i18n || translatedMessage === undefined) {
-      translatedMessage = error.message;
-    }
     parsedError = Object.assign({}, error, { message: translatedMessage });
   }
 
