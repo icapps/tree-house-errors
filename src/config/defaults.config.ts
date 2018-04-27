@@ -1,5 +1,5 @@
 import * as httpStatus from 'http-status';
-import { errorConfig as errors } from './errorConfig';
+import { errors } from './errors.config';
 
 export const errorDefaults = {
   DEFAULT_HTTP_CODE: httpStatus.INTERNAL_SERVER_ERROR,
