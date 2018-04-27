@@ -1,6 +1,6 @@
 import { importTranslations } from '../src';
 import * as icappsTranslation from 'icapps-translations';
-import { existsSync, rmdirSync } from 'fs';
+import { existsSync, rmdirSync, mkdirSync } from 'fs';
 
 describe('importTranslations', () => {
   let icappsTranslationMock;
@@ -8,6 +8,7 @@ describe('importTranslations', () => {
   beforeEach(() => {
     icappsTranslationMock = jest.spyOn(icappsTranslation, 'import').mockImplementation(() => { });
   });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -15,6 +16,19 @@ describe('importTranslations', () => {
   it('should import the translations', async () => {
     await importTranslations('randomToken');
     expect(icappsTranslationMock).toHaveBeenCalledTimes(1);
+    rmdirSync('./locales'); // cleanup
+  });
+
+  it('should use the existing locales directory', async () => {
+    const newDestination = './tests/locales';
+    mkdirSync(newDestination);
+    expect(existsSync(newDestination)).toEqual(true);
+
+    await importTranslations('randomToken', { destination: newDestination });
+    expect(icappsTranslationMock).toHaveBeenCalledTimes(1);
+
+    // cleanup
+    rmdirSync(newDestination);
   });
 
   it('should create the locales directory if not exists', async () => {
@@ -22,9 +36,9 @@ describe('importTranslations', () => {
 
     await importTranslations('randomToken', { destination: newDestination });
     expect(icappsTranslationMock).toHaveBeenCalledTimes(1);
-    expect(await existsSync(newDestination)).toEqual(true);
+    expect(existsSync(newDestination)).toEqual(true);
 
     // cleanup
-    await rmdirSync(newDestination);
+    rmdirSync(newDestination);
   });
 });

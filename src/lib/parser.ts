@@ -2,9 +2,9 @@ import * as ev from 'express-validation';
 import { ApiError, ValidationError } from './errors';
 import { errors } from '../config/errors.config';
 import { errorDefaults } from '../config/defaults.config';
-import { translator } from './translator';
+import { getTranslator } from './translator';
 
-export function parseErrors(error: any, language: string = 'en') {
+export function parseErrors(error: any, i18n?: I18nOptions) {
   const metaData: any = {};
   let parsedError = new ApiError(errorDefaults.DEFAULT_HTTP_CODE, errorDefaults.DEFAULT_ERROR); // Default error
 
@@ -27,9 +27,14 @@ export function parseErrors(error: any, language: string = 'en') {
 
   // Own thrown ApiErrors
   if (error instanceof ApiError) {
-    translator.setLocale(language);
+    let translatedMessage = error.i18n; // TODO: Weird stuff??
 
-    let translatedMessage = translator.__(error.i18n);
+    if (i18n) {
+      const translator = getTranslator(i18n.path, i18n.defaultLocale);
+      translator.setLocale(i18n.language);
+      translatedMessage = translator.__(error.i18n);
+    }
+
     // if the translatedMessage equals the error code
     // OR is undefined because not found
     // fallback to default error message from ErrorConfig
@@ -49,3 +54,11 @@ export function parseErrors(error: any, language: string = 'en') {
     meta: Object.keys(metaData).length !== 0 ? metaData : undefined,
   };
 }
+
+// Interfaces
+export interface I18nOptions {
+  defaultLocale?: string;
+  language?: string;
+  path: string;
+}
+

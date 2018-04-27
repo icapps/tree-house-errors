@@ -1,29 +1,26 @@
 import { ValidationError } from 'express-validation';
 import * as httpStatus from 'http-status';
-import * as icappsTranslation from 'icapps-translations';
-import { ApiError, errors, parseErrors, importTranslations } from '../src';
+import * as translator from '../src/lib/translator';
+import { ApiError, errors, parseErrors } from '../src';
 import { errorDefaults } from '../src/config/defaults.config';
-import { translator } from '../src/lib/translator';
 
 describe('errorParser', () => {
   const defaultError = new ApiError(errorDefaults.DEFAULT_HTTP_CODE, errorDefaults.DEFAULT_ERROR);
   let i18nMock;
-  jest.spyOn(icappsTranslation, 'import').mockImplementation(() => { });
-
-  beforeAll(async () => {
-    await importTranslations('randomToken');
-  });
+  let localeMock;
 
   beforeEach(() => {
-    i18nMock = jest.spyOn(translator, '__');
+    i18nMock = jest.fn(() => {});
+    localeMock = jest.fn(() => { });
+    jest.spyOn(translator, 'getTranslator').mockImplementation(() => ({ __: i18nMock, setLocale: localeMock }));
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
   describe('Unkown errors', () => {
-    it('Should return the default error when unknown object is passed', () => {
+    it('Should return the default error when unknown object is passed without translation', () => {
       const parsedError = parseErrors({ myProp: 'iDunno' });
       expect(parsedError).toMatchObject({
         id: expect.any(String),
@@ -37,7 +34,6 @@ describe('errorParser', () => {
 
     // TODO: Other custom errors extending from Error
   });
-
 
   describe('Knex.js errors', () => {
     const error = new Error('Some error...');
@@ -56,7 +52,6 @@ describe('errorParser', () => {
         schema: 'public',
       },
     });
-
   });
 
   describe('Express Validation errors', () => {
@@ -78,14 +73,14 @@ describe('errorParser', () => {
   });
 
   describe('Predefined Api errors', () => {
-    it('Should succesfully parse default ApiError', () => {
+    it('Should succesfully parse default ApiError with i18n', () => {
       const errorTranslation = 'English translation';
-      i18nMock.mockImplementation(() => errorTranslation);
+      i18nMock.mockReturnValue(errorTranslation);
 
       try {
         throw new ApiError(httpStatus.BAD_REQUEST, errors.INVALID_INPUT);
       } catch (err) {
-        const parsedError = parseErrors(err, 'en');
+        const parsedError = parseErrors(err, { path: '/', language: 'en' });
         expect(parsedError).toMatchObject({
           id: expect.any(String),
           status: httpStatus.BAD_REQUEST,
@@ -94,8 +89,13 @@ describe('errorParser', () => {
           detail: errorTranslation,
         });
       }
+
+      expect(i18nMock).toHaveBeenCalledTimes(1);
+      expect(localeMock).toHaveBeenCalledTimes(1);
     });
+
     it('Should succesfully parse default ApiError without an i18n key', () => {
+      expect.assertions(1);
       try {
         throw new ApiError(httpStatus.BAD_REQUEST, errors.INVALID_INPUT);
       } catch (err) {
@@ -109,11 +109,13 @@ describe('errorParser', () => {
         });
       }
     });
+
     it('Should succesfully parse default ApiError with default message when language is not available', () => {
+      expect.assertions(1);
       try {
         throw new ApiError(httpStatus.BAD_REQUEST, errors.INVALID_INPUT);
       } catch (err) {
-        const parsedError = parseErrors(err, 'du');
+        const parsedError = parseErrors(err, { path: '', language: 'du' });
         expect(parsedError).toMatchObject({
           id: expect.any(String),
           status: httpStatus.BAD_REQUEST,
@@ -125,12 +127,13 @@ describe('errorParser', () => {
     });
     it('Should succesfully parse default ApiError for Dutch translation', () => {
       const errorTranslation = 'Nederlands vertaling';
-      i18nMock.mockImplementation(() => errorTranslation);
+      i18nMock.mockReturnValue(errorTranslation);
 
+      expect.assertions(3);
       try {
         throw new ApiError(httpStatus.BAD_REQUEST, errors.INVALID_INPUT);
       } catch (err) {
-        const parsedError = parseErrors(err, 'nl');
+        const parsedError = parseErrors(err, { path: '', language: 'nl' });
         expect(parsedError).toMatchObject({
           id: expect.any(String),
           status: httpStatus.BAD_REQUEST,
@@ -139,6 +142,9 @@ describe('errorParser', () => {
           detail: errorTranslation,
         });
       }
+
+      expect(i18nMock).toHaveBeenCalledTimes(1);
+      expect(localeMock).toHaveBeenCalledTimes(1);
     });
 
     // TODO: Custom cases

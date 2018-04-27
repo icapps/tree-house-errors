@@ -9,8 +9,8 @@ const defaultOptions = {
 export async function importTranslations(token: string, options?: TranslationOptions) {
   const allOptions = Object.assign({}, defaultOptions, options);
   // if locales location does not exists, make directory
-  if (!await existsSync(allOptions.destination)) {
-    await mkdirSync(allOptions.destination);
+  if (!existsSync(allOptions.destination)) {
+    mkdirSync(allOptions.destination);
   }
 
   return icappsTranslation.import(url, token, allOptions);
