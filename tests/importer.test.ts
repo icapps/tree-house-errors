@@ -1,5 +1,5 @@
 import { importTranslations } from '../src';
-import * as icappsTranslation from 'icapps-translations';
+import * as icappsTranslation from 'tree-house-translations';
 import { existsSync, rmdirSync, mkdirSync } from 'fs';
 
 describe('importTranslations', () => {
@@ -14,7 +14,7 @@ describe('importTranslations', () => {
   });
 
   it('should import the translations', async () => {
-    await importTranslations('http://test.be', 'randomToken');
+    await importTranslations('http://test.be', 'randomToken', { destination: './locales' });
     expect(icappsTranslationMock).toHaveBeenCalledTimes(1);
     rmdirSync('./locales'); // cleanup
   });

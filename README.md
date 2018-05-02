@@ -1,4 +1,4 @@
-# Treehouse Errors
+# Treehouse errors
 
 Custom NodeJS error classes and definitions with an error parser utility function
 
