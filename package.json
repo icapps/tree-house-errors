@@ -23,7 +23,7 @@
     "http-status": "~1.1.0",
     "i18n": "~0.8.3",
     "joi": "~13.2.0",
-    "tree-house-translations": "~1.0.1",
+    "tree-house-translations": "~1.1.0",
     "uuid": "~3.2.1"
   },
   "devDependencies": {
