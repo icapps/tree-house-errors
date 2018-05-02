@@ -1,16 +1,16 @@
-import * as icappsTranslation from 'icapps-translations';
+import * as icappsTranslation from 'tree-house-translations';
 import { existsSync, mkdirSync } from 'fs';
 
-const url = '';
-const defaultOptions = {
+const defaultOptions = <any> {
   destination: process.cwd() + '/locales',
   clean: true,
   seperateCategories: false,
   exportType: 'json',
 };
 
-export async function importTranslations(token: string, options?: TranslationOptions) {
+export async function importTranslations(url: string, token: string, options?: TranslationOptions) {
   const allOptions = Object.assign({}, defaultOptions, options);
+
   // if locales location does not exists, make directory
   if (!existsSync(allOptions.destination)) {
     mkdirSync(allOptions.destination);
