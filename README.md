@@ -112,14 +112,14 @@ throw new AuthenticationError(error, optionalArgs);
 Predefined error types that can be used over multiple projects with a message and code per type. The current list provides following errors:
 
 ```javascript
-INTERNAL_ERROR:           { code: 'INTERNAL_ERROR', message: 'An unkown error occurred' },
-INVALID_INPUT:            { code: 'INVALID_INPUT', message: 'Invalid input provided' },
-AUTHENTICATION_FAILED:    { code: 'AUTHENTICATION_FAILED', message: 'Authentication failed' },
-BAD_REQUEST:              { code: 'BAD_REQUEST', message: 'Bad request' },
-MISSING_HEADERS:          { code: 'MISSING_HEADERS', message: 'Missing headers' },
-UNAUTHORIZED:             { code: 'UNAUTHORIZED', message: 'Unauthorized' },
-FORBIDDEN:                { code: 'FORBIDDEN', message: 'No access' },
-RESOURCE_NOT_FOUND:       { code: 'RESOURCE_NOT_FOUND', message: 'Resource not found' },
+INTERNAL_ERROR:         { code: 'INTERNAL_ERROR',i18n: 'internal_error',message: 'An unkown error occurred' },
+INVALID_INPUT:          { code: 'INVALID_INPUT', i18n: 'invalid_input', message: 'Invalid input provided' },
+AUTHENTICATION_FAILED:  { code: 'AUTHENTICATION_FAILED', i18n: 'authentication_failed', message: 'Authentication failed' },
+BAD_REQUEST:            { code: 'BAD_REQUEST', i18n: 'bad_request', message: 'Bad request' },
+MISSING_HEADERS:        { code: 'MISSING_HEADERS', i18n: 'missing_headers', message: 'Missing headers' },
+UNAUTHORIZED:           { code: 'UNAUTHORIZED', i18n: 'unauthorized', message: 'Unauthorized' },
+FORBIDDEN:              { code: 'FORBIDDEN', i18n: 'forbidden', message: 'No access' },
+RESOURCE_NOT_FOUND:     { code: 'RESOURCE_NOT_FOUND', i18n: 'resource_not_found', message: 'Resource not found' },
 ```
 
 Example
@@ -158,24 +158,6 @@ serializer.serialize([parsedError]);
 ```
 
 > The `parseErrors` function will load the i18n configuration once, and reuse the same instance afterwards. It is not possible to overwrite the configuration after the first call. This has to do with performance and caching of translations.
-
-## Import translations
-
-Import new or updated translations from the iCapps translation portal
-
-```javascript
-  import { importTranslations } from 'tree-house-errors';
-
-  await importTranslations('applicationToken', {
-    destination: __dirname + '/locales'
-    clean: false,               // Optional (default to true)
-    verbose: true,              // Optional (defaults to false)
-    seperateCategories: false,  // Optional (defaults to true)
-    exportType: 'plist',        // Optional (defaults to 'json')
-  });
-```
-
-- [more info about the icapps translations module used to import translations](https://github.com/icapps/js-translations)
 
 ## Tests
 
