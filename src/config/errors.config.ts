@@ -1,5 +1,5 @@
 export const errors = {
-  INTERNAL_ERROR:         { code: 'INTERNAL_ERROR',i18n: 'internal_error',message: 'An unkown error occurred' },
+  INTERNAL_ERROR:         { code: 'INTERNAL_ERROR', i18n: 'internal_error', message: 'An unkown error occurred' },
   INVALID_INPUT:          { code: 'INVALID_INPUT', i18n: 'invalid_input', message: 'Invalid input provided' },
   AUTHENTICATION_FAILED:  { code: 'AUTHENTICATION_FAILED', i18n: 'authentication_failed', message: 'Authentication failed' },
   BAD_REQUEST:            { code: 'BAD_REQUEST', i18n: 'bad_request', message: 'Bad request' },

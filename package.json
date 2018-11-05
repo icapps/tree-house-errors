@@ -6,13 +6,13 @@
   "types": "build/index.d.ts",
   "scripts": {
     "clean": "rimraf ./build",
-    "build": "yarn clean && tsc",
+    "build": "npm run clean && tsc",
     "lint": "tslint 'src/**/*.ts'",
-    "test": "jest --forceExit",
-    "test:coverage": "jest --coverage --collectCoverageFrom=src/**/*.ts --forceExit",
+    "test": "jest",
+    "test:coverage": "jest --coverage --collectCoverageFrom=src/**/*.ts",
     "test:watch": "jest --watchAll",
-    "pretest": "yarn build",
-    "prepublish": "yarn build",
+    "pretest": "npm run build",
+    "prepare": "npm run build",
     "release": "node_modules/np/cli.js --no-cleanup"
   },
   "precommit": [
@@ -20,26 +20,26 @@
   ],
   "dependencies": {
     "express-validation": "~1.0.2",
-    "http-status": "~1.1.0",
+    "http-status": "~1.2.0",
     "i18n": "~0.8.3",
-    "joi": "~13.2.0",
-    "uuid": "~3.2.1"
+    "joi": "~14.0.4",
+    "uuid": "~3.3.2"
   },
   "devDependencies": {
     "@types/http-status": "~0.2.30",
     "@types/i18n": "~0.8.3",
-    "@types/jest": "~22.2.0",
-    "@types/uuid": "~3.4.3",
-    "coveralls": "^3.0.1",
-    "jest": "^22.1.4",
-    "np": "^2.20.1",
+    "@types/jest": "~23.3.9",
+    "@types/uuid": "~3.4.4",
+    "coveralls": "^3.0.2",
+    "jest": "^23.6.0",
+    "np": "^3.0.4",
     "pre-commit": "^1.2.2",
     "rimraf": "^2.6.2",
-    "supertest": "^3.0.0",
-    "ts-jest": "^22.4.2",
-    "tslint": "^5.9.1",
-    "tslint-config-airbnb": "^5.8.0",
-    "typescript": "^2.8.3"
+    "supertest": "^3.3.0",
+    "ts-jest": "~22.4.6",
+    "tslint": "^5.11.0",
+    "tslint-config-airbnb": "^5.11.0",
+    "typescript": "^3.1.6"
   },
   "engines": {
     "node": ">=6.0.0"
@@ -48,7 +48,7 @@
     "test": "tests"
   },
   "keywords": [
-    "tree House",
+    "tree house",
     "treehouse",
     "errors"
   ],

@@ -61,4 +61,3 @@ export interface I18nOptions {
   language?: string;
   path: string;
 }
-
