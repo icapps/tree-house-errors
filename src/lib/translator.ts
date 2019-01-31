@@ -8,7 +8,7 @@ const translator: any = {};
 export function getTranslator(path: string, defaultLocale?: string) {
   if (Object.keys(translator).length === 0) {
     i18n.configure({
-      directory: path, // process.cwd() + '/locales',
+      directory: path,
       defaultLocale: defaultLocale || 'en',
       updateFiles: false,
       register: translator,
