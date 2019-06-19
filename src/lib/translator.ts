@@ -1,18 +1,8 @@
-import * as i18n from 'i18n';
-
-const translator: any = {};
+import * as icappsTranslation from 'tree-house-translations';
 
 /**
- * Return singleton i18n instance
+ * Returns a translator object
+ * @param {String} path
+ * @param {String} [defaultLocale]
  */
-export function getTranslator(path: string, defaultLocale?: string) {
-  if (Object.keys(translator).length === 0) {
-    i18n.configure({
-      directory: path,
-      defaultLocale: defaultLocale || 'en',
-      updateFiles: false,
-      register: translator,
-    });
-  }
-  return translator;
-}
+export const getTranslator = (path: string, defaultLocale?: string) => icappsTranslation.initTranslator(path, defaultLocale);

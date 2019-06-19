@@ -12,13 +12,13 @@ Custom NodeJS error classes and definitions with an error parser utility functio
 Install via npm
 
 ```shell
-npm install tree-house-errors
+npm install @icapps/tree-house-errors
 ```
 
 or via yarn
 
 ```shell
-yarn add tree-house-errors
+yarn add @icapps/tree-house-errors
 ```
 
 ## Error types
@@ -125,7 +125,7 @@ RESOURCE_NOT_FOUND:     { code: 'RESOURCE_NOT_FOUND', i18n: 'resource_not_found'
 Example
 
 ```javascript
-import { errorConfig as errors } from 'tree-house-errors'
+import { errorConfig as errors } from '@icapps/tree-house-errors'
 throw new ApiError(400, errors.BAD_REQUEST);
 ```
 

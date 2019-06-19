@@ -1,18 +1,17 @@
-import { ValidationError } from 'express-validation';
 import * as httpStatus from 'http-status';
+import { ValidationError } from 'express-validation';
+
 import * as translator from '../src/lib/translator';
 import { ApiError, errors, parseErrors } from '../src';
 import { errorDefaults } from '../src/config/defaults.config';
 
 describe('errorParser', () => {
   const defaultError = new ApiError(errorDefaults.DEFAULT_HTTP_CODE, errorDefaults.DEFAULT_ERROR);
-  let i18nMock;
-  let localeMock;
+  let translateMock;
 
   beforeEach(() => {
-    i18nMock = jest.fn(() => {});
-    localeMock = jest.fn(() => { });
-    jest.spyOn(translator, 'getTranslator').mockImplementation(() => ({ __: i18nMock, setLocale: localeMock }));
+    translateMock = jest.fn(() => {});
+    jest.spyOn(translator, 'getTranslator').mockImplementation(() => ({ translate: translateMock }));
   });
 
   afterEach(() => {
@@ -75,7 +74,7 @@ describe('errorParser', () => {
   describe('Predefined Api errors', () => {
     it('Should succesfully parse default ApiError with i18n', () => {
       const errorTranslation = 'English translation';
-      i18nMock.mockReturnValue(errorTranslation);
+      translateMock.mockReturnValue(errorTranslation);
 
       try {
         throw new ApiError(httpStatus.BAD_REQUEST, errors.INVALID_INPUT);
@@ -90,8 +89,7 @@ describe('errorParser', () => {
         });
       }
 
-      expect(i18nMock).toHaveBeenCalledTimes(1);
-      expect(localeMock).toHaveBeenCalledTimes(1);
+      expect(translateMock).toHaveBeenCalledTimes(1);
     });
 
     it('Should succesfully parse default ApiError without an i18n key', () => {
@@ -127,9 +125,9 @@ describe('errorParser', () => {
     });
     it('Should succesfully parse default ApiError for Dutch translation', () => {
       const errorTranslation = 'Nederlands vertaling';
-      i18nMock.mockReturnValue(errorTranslation);
+      translateMock.mockReturnValue(errorTranslation);
 
-      expect.assertions(3);
+      expect.assertions(2);
       try {
         throw new ApiError(httpStatus.BAD_REQUEST, errors.INVALID_INPUT);
       } catch (err) {
@@ -143,8 +141,7 @@ describe('errorParser', () => {
         });
       }
 
-      expect(i18nMock).toHaveBeenCalledTimes(1);
-      expect(localeMock).toHaveBeenCalledTimes(1);
+      expect(translateMock).toHaveBeenCalledTimes(1);
     });
 
     // TODO: Custom cases
