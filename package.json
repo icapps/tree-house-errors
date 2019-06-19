@@ -1,5 +1,5 @@
 {
-  "name": "tree-house-errors",
+  "name": "@icapps/tree-house-errors",
   "version": "1.2.4",
   "description": "NodeJS default error definitions with an error parser utility function",
   "main": "build/index.js",
