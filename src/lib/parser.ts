@@ -1,10 +1,16 @@
 import * as ev from 'express-validation';
+
 import { ApiError, ValidationError } from './errors';
 import { errors } from '../config/errors.config';
 import { errorDefaults } from '../config/defaults.config';
 import { getTranslator } from './translator';
 
-export function parseErrors(error: any, i18n?: I18nOptions) {
+/**
+ * Parse errors
+ * @param {String} error
+ * @param {Object} translatorOptions
+ */
+export function parseErrors(error: any, translatorOptions?: TranslatorOptions) {
   const metaData: any = {};
   let parsedError = new ApiError(errorDefaults.DEFAULT_HTTP_CODE, errorDefaults.DEFAULT_ERROR); // Default error
 
@@ -29,10 +35,9 @@ export function parseErrors(error: any, i18n?: I18nOptions) {
   if (error instanceof ApiError) {
     let translatedMessage = error.message;
 
-    if (i18n) {
-      const translator = getTranslator(i18n.path, i18n.defaultLocale);
-      translator.setLocale(i18n.language);
-      translatedMessage = translator.__(error.i18n);
+    if (translatorOptions) {
+      const translator = getTranslator(translatorOptions.path, translatorOptions.defaultLocale);
+      translatedMessage = translator.translate(error.i18n);
 
       // if the translatedMessage equals the error code OR is undefined because not found
       // fallback to default error message from errors
@@ -56,8 +61,8 @@ export function parseErrors(error: any, i18n?: I18nOptions) {
 }
 
 // Interfaces
-export interface I18nOptions {
+export interface TranslatorOptions {
+  path: string;
   defaultLocale?: string;
   language?: string;
-  path: string;
 }
