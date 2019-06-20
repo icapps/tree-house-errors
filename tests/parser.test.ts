@@ -10,7 +10,7 @@ describe('errorParser', () => {
   let translateMock;
 
   beforeEach(() => {
-    translateMock = jest.fn(() => {});
+    translateMock = jest.fn(() => { });
     jest.spyOn(translator, 'getTranslator').mockImplementation(() => ({ translate: translateMock }));
   });
 
@@ -142,6 +142,19 @@ describe('errorParser', () => {
       }
 
       expect(translateMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('Should use default message when translator throws an error', () => {
+      translateMock.mockImplementation(() => { throw new Error('Error finding file'); });
+
+      const parsedError = parseErrors(new ApiError(httpStatus.BAD_REQUEST, errors.INVALID_INPUT), { path: '', language: 'du' });
+      expect(parsedError).toMatchObject({
+        id: expect.any(String),
+        status: httpStatus.BAD_REQUEST,
+        code: errors.INVALID_INPUT.code,
+        title: errors.INVALID_INPUT.message,
+        detail: errors.INVALID_INPUT.message,
+      });
     });
 
     // TODO: Custom cases

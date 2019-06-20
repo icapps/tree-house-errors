@@ -37,7 +37,12 @@ export function parseErrors(error: any, translatorOptions?: TranslatorOptions) {
 
     if (translatorOptions) {
       const translator = getTranslator(translatorOptions.path, translatorOptions.defaultLocale);
-      translatedMessage = translator.translate(error.i18n);
+      try {
+        translatedMessage = translator.translate(error.i18n);
+      } catch (_error) {
+        // If language file was not found set text to default message
+        translatedMessage = error.message;
+      }
 
       // if the translatedMessage equals the error code OR is undefined because not found
       // fallback to default error message from errors
