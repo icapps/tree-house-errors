@@ -65,7 +65,6 @@ describe('errors', () => {
       }
     });
 
-
     it('Should throw an BadRequestError with custom error', () => {
       const args = {
         code: 'CUSTOM_CODE',
