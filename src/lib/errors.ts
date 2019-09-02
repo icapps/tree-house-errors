@@ -38,7 +38,7 @@ export class NotFoundError extends ApiError {
 }
 
 export class ForbiddenError extends ApiError {
-  constructor(error?: ErrorType , args?: ErrorArgs) {
+  constructor(error?: ErrorType, args?: ErrorArgs) {
     super(httpStatus.FORBIDDEN, error == null ? errors.FORBIDDEN : error, args);
     this.name = 'ForbiddenError';
   }
