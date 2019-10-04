@@ -159,4 +159,40 @@ describe('errorParser', () => {
 
     // TODO: Custom cases
   });
+
+  describe('Celebrate errors', () => {
+    it('Should parse celebrate joi error', () => {
+      const celebrateError = {
+        joi: {
+          isJoi: true,
+          details: 'Supercool details',
+        },
+      };
+
+      const parsedError = parseErrors(celebrateError);
+      expect(parsedError).toMatchObject({
+        id: expect.any(String),
+        status: httpStatus.BAD_REQUEST,
+        code: errors.INVALID_INPUT.code,
+        title: errors.INVALID_INPUT.message,
+        detail: 'Supercool details',
+      });
+    });
+
+    it('Should parse celebrate joi error without ValidationError', () => {
+      const celebrateError = {
+        joi: {},
+      };
+
+      const parsedError = parseErrors(celebrateError);
+      expect(parsedError).toMatchObject({
+        id: expect.any(String),
+        status: defaultError.status,
+        code: defaultError.code,
+        title: defaultError.message,
+        detail: defaultError.message,
+        meta: undefined,
+      });
+    });
+  });
 });
