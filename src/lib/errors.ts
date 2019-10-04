@@ -8,7 +8,7 @@ export class ApiError extends Error {
   status: number;
   i18n?: string;
   id?: string;
-  detail?: string;
+  detail?: any;
 
   constructor(status: number, error: ErrorType, args: { message?: string, detail?: any, stack?: any } = {}) {
     const { message, detail, stack } = args;
