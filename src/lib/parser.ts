@@ -1,4 +1,5 @@
 import * as ev from 'express-validation';
+import { isCelebrate } from 'celebrate';
 
 import { ApiError, ValidationError } from './errors';
 import { errors } from '../config/errors.config';
@@ -28,6 +29,14 @@ export function parseErrors(error: any, translatorOptions?: TranslatorOptions) {
   if (error instanceof ev.ValidationError) {
     parsedError = new ValidationError(errors.INVALID_INPUT, {
       detail: error.errors,
+    });
+  }
+
+  // Celebrate validation errors
+  if (isCelebrate(error)) {
+    const { joi } = error;
+    parsedError = new ValidationError(errors.INVALID_INPUT, {
+      detail: joi.details,
     });
   }
 
