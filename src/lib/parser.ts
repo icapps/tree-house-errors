@@ -1,5 +1,4 @@
 import * as ev from 'express-validation';
-import { isCelebrate } from 'celebrate';
 
 import { ApiError, ValidationError } from './errors';
 import { errors } from '../config/errors.config';
@@ -11,7 +10,7 @@ import { getTranslator } from './translator';
  * @param {String} error
  * @param {Object} translatorOptions
  */
-export function parseErrors(error: any, translatorOptions?: TranslatorOptions) {
+export function parseErrors(error: any = {}, translatorOptions?: TranslatorOptions) {
   const metaData: any = {};
   let parsedError = new ApiError(errorDefaults.DEFAULT_HTTP_CODE, errorDefaults.DEFAULT_ERROR); // Default error
 
@@ -32,12 +31,14 @@ export function parseErrors(error: any, translatorOptions?: TranslatorOptions) {
     });
   }
 
-  // Celebrate validation errors
-  if (isCelebrate(error)) {
-    const { joi } = error;
-    parsedError = new ValidationError(errors.INVALID_INPUT, {
-      detail: joi.details,
-    });
+  // Celebrate middleware validation errors
+  if (error.hasOwnProperty('joi')) {
+    const { isJoi = false, details } = error.joi || {};
+    if (isJoi) {
+      parsedError = new ValidationError(errors.INVALID_INPUT, {
+        detail: details,
+      });
+    }
   }
 
   // Own thrown ApiErrors

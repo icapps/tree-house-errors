@@ -133,7 +133,7 @@ throw new ApiError(400, errors.BAD_REQUEST);
 
 ### parseErrors(error, i18nOptions (optional))
 
-Parse any data into an error object with all properties needed for jsonade parser. Also parses `express-validation` errors.
+Parse any data into an error object with all properties needed for jsonade parser. Also parses [`express-validation`](https://github.com/andrewkeig/express-validation) and [`celebrate`](https://github.com/arb/celebrate) errors.
 
 ```javascript
 const error = new BadRequestError(...);
