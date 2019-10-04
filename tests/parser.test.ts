@@ -123,6 +123,7 @@ describe('errorParser', () => {
         });
       }
     });
+
     it('Should succesfully parse default ApiError for Dutch translation', () => {
       const errorTranslation = 'Nederlands vertaling';
       translateMock.mockReturnValue(errorTranslation);
