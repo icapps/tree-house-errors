@@ -30,7 +30,7 @@
     "uuid": "~3.3.3"
   },
   "devDependencies": {
-    "@types/http-status": "~0.2.30",
+    "@types/http-status": "~1.1.1",
     "@types/i18n": "~0.8.6",
     "@types/jest": "~24.0.18",
     "@types/uuid": "~3.4.5",
