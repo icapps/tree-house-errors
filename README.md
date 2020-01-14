@@ -131,6 +131,20 @@ throw new ApiError(400, errors.BAD_REQUEST);
 
 ## Error parsing
 
+### isApiError(object)
+
+Will return boolean indicating whether object has all required properties to be an `ApiError`.
+
+```javascript
+  // Will return true
+  isApiError({ status: 200, code: 'MY_CODE', title: 'MY_ERROR', detail: {} })
+
+  // Will return false
+  isApiError({ status: 200, code: 'MY_CODE' })
+```
+
+> Will automatically cast to ApiError if succeeds and using Typescript
+
 ### parseErrors(error, i18nOptions (optional))
 
 Parse any data into an error object with all properties needed for jsonade parser. Also parses [`express-validation`](https://github.com/andrewkeig/express-validation) and [`celebrate`](https://github.com/arb/celebrate) errors.
@@ -158,6 +172,22 @@ serializer.serialize([parsedError]);
 ```
 
 > The `parseErrors` function will load the i18n configuration once, and reuse the same instance afterwards. It is not possible to overwrite the configuration after the first call. This has to do with performance and caching of translations.
+
+### parseJsonResponse(object)
+
+Parse json object containing errors into javascript `ApiError` instances.
+
+```javascript
+  try {
+    await doApiCall(...);
+    // Returns { errors: [{ status: 400, code: 'BAD_REQUEST', ... }] }
+  } catch(errorResponse) {
+    const errors = parseJsonResponse(errorResponse);
+    // Will return array containing `ApiError` objects
+  }
+```
+
+> Make sure the object contains an `errors` root key: `{ errors: [ ... ] }`
 
 ## Tests
 

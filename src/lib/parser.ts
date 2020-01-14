@@ -1,4 +1,5 @@
 import * as ev from 'express-validation';
+import * as _ from 'lodash';
 
 import { ApiError, ValidationError } from './errors';
 import { errors } from '../config/errors.config';
@@ -6,11 +7,21 @@ import { errorDefaults } from '../config/defaults.config';
 import { getTranslator } from './translator';
 
 /**
+ * Check if object has all required properties to be an ApiError
+ * @param {Object} obj
+ */
+export const isApiError = (obj: ParsedError | any = {}): obj is ParsedError =>
+  _.has(obj, 'status')
+  && _.has(obj, 'code')
+  && _.has(obj, 'title')
+  && _.has(obj, 'detail');
+
+/**
  * Parse errors
  * @param {String} error
  * @param {Object} translatorOptions
  */
-export function parseErrors(error: any = {}, translatorOptions?: TranslatorOptions) {
+export function parseErrors(error: any = {}, translatorOptions?: TranslatorOptions): ParsedError {
   const metaData: any = {};
   let parsedError = new ApiError(errorDefaults.DEFAULT_HTTP_CODE, errorDefaults.DEFAULT_ERROR); // Default error
 
@@ -75,9 +86,37 @@ export function parseErrors(error: any = {}, translatorOptions?: TranslatorOptio
   };
 }
 
+/**
+ * Parse json response containing errors into actual ApiError objects
+ * @param {Object} response
+ */
+export function parseJsonResponse<T>(response: any): ApiError[] | T {
+  if ((response || {}).hasOwnProperty('errors') && Array.isArray(response.errors)) {
+    return response.errors.map((error: any) => {
+      if (isApiError(error)) {
+        const { status, code, title, detail, meta = {} } = error;
+        return new ApiError(status, { code, message: title }, { detail, stack: (meta || {}).stack });
+      }
+
+      return error;
+    });
+  }
+
+  return response;
+}
+
 // Interfaces
 export interface TranslatorOptions {
   path: string;
   defaultLocale?: string;
   language?: string;
+}
+
+export interface ParsedError {
+  id: string;
+  status: number;
+  code: string;
+  title: string;
+  detail: any;
+  meta: any | undefined;
 }
