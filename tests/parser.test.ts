@@ -2,7 +2,7 @@ import * as httpStatus from 'http-status';
 import { ValidationError } from 'express-validation';
 
 import * as translator from '../src/lib/translator';
-import { ApiError, errors, parseErrors } from '../src';
+import { ApiError, errors, parseErrors, parseJsonResponse, isApiError } from '../src';
 import { errorDefaults } from '../src/config/defaults.config';
 
 describe('errorParser', () => {
@@ -193,6 +193,137 @@ describe('errorParser', () => {
         title: defaultError.message,
         detail: defaultError.message,
         meta: undefined,
+      });
+    });
+  });
+
+  describe('isApiError', () => {
+    it('Should return true when all properties are available', () => {
+      const output = isApiError({
+        status: httpStatus.BAD_REQUEST,
+        code: 'RANDOM_CODE',
+        title: 'My title',
+        detail: {
+          key: 'myValue',
+        },
+      });
+
+      expect(output).toEqual(true);
+    });
+
+    it('Should return false when some properties are missing', () => {
+      expect(isApiError({})).toEqual(false);
+      expect(isApiError({ status: httpStatus.NOT_ACCEPTABLE, code: '120', title: 'any Title' })).toEqual(false);
+      expect(isApiError({ status: httpStatus.INTERNAL_SERVER_ERROR, code: '120', detail: 'any Title' })).toEqual(false);
+      expect(isApiError({ code: '120', detail: 'any Title' })).toEqual(false);
+      expect(isApiError({ status: httpStatus.BAD_REQUEST, detail: 'any Title' })).toEqual(false);
+    });
+  });
+
+  describe('parseJsonResponse', () => {
+    it('Should succesfully return parsed errors', () => {
+      const result = parseJsonResponse({
+        errors: [{
+          status: httpStatus.BAD_REQUEST,
+          code: 'MY_CODE',
+          title: 'This is an error!',
+          detail: { key: 'Value Mister' },
+          meta: {
+            stack: 'Something wrong',
+          },
+        }],
+      });
+
+      expect(result).toBeInstanceOf(Array);
+      expect(result).toHaveLength(1);
+
+      expect(result[0]).toBeInstanceOf(ApiError);
+      expect(result[0]).toMatchObject({
+        id: expect.any(String),
+        status: httpStatus.BAD_REQUEST,
+        code: 'MY_CODE',
+        message: 'This is an error!',
+        detail: { key: 'Value Mister' },
+        stack: 'Something wrong',
+      });
+    });
+
+    it('Should succesfully return parsed errors with empty meta', () => {
+      const result = parseJsonResponse({
+        errors: [{
+          status: httpStatus.BAD_REQUEST,
+          code: 'MY_CODE',
+          title: 'This is an error!',
+          detail: { key: 'Value Mister' },
+          meta: null,
+        }],
+      });
+
+      expect(result).toBeInstanceOf(Array);
+      expect(result).toHaveLength(1);
+
+      expect(result[0]).toBeInstanceOf(ApiError);
+      expect(result[0]).toMatchObject({
+        id: expect.any(String),
+        status: httpStatus.BAD_REQUEST,
+        code: 'MY_CODE',
+        message: 'This is an error!',
+        detail: { key: 'Value Mister' },
+        stack: {},
+      });
+    });
+
+    it('Should succesfully return parsed errors without meta', () => {
+      const result = parseJsonResponse({
+        errors: [{
+          status: httpStatus.BAD_REQUEST,
+          code: 'MY_CODE',
+          title: 'This is an error!',
+          detail: { key: 'Value Mister' },
+        }],
+      });
+
+      expect(result).toBeInstanceOf(Array);
+      expect(result).toHaveLength(1);
+
+      expect(result[0]).toBeInstanceOf(ApiError);
+      expect(result[0]).toMatchObject({
+        id: expect.any(String),
+        status: httpStatus.BAD_REQUEST,
+        code: 'MY_CODE',
+        message: 'This is an error!',
+        detail: { key: 'Value Mister' },
+        stack: {},
+      });
+    });
+
+    it('Should return response object when contains no errors', () => {
+      expect(parseJsonResponse(null)).toEqual(null);
+      expect(parseJsonResponse([])).toEqual([]);
+      expect(parseJsonResponse({ errors: [] })).toEqual([]);
+    });
+
+    it('Should return same error when not all properties were found', () => {
+      const result = parseJsonResponse({
+        errors: [{
+          status: httpStatus.BAD_REQUEST,
+          detail: { key: 'Value Mister' },
+          meta: {
+            stack: 'Something wrong',
+          },
+        }],
+      });
+
+      expect(result).toBeInstanceOf(Array);
+      expect(result).toHaveLength(1);
+
+      expect(result[0]).not.toBeInstanceOf(ApiError);
+      expect(result[0]).toMatchObject({
+        status: httpStatus.BAD_REQUEST,
+        detail: { key: 'Value Mister' },
+        meta: {
+          stack: 'Something wrong',
+        },
       });
     });
   });
