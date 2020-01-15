@@ -1,7 +1,7 @@
 import * as ev from 'express-validation';
 import * as _ from 'lodash';
 
-import { ApiError, ValidationError } from './errors';
+import { ApiError, ValidationError, InternalServerError } from './errors';
 import { errors } from '../config/errors.config';
 import { errorDefaults } from '../config/defaults.config';
 import { getTranslator } from './translator';
@@ -102,7 +102,8 @@ export function parseJsonErrors(response: any): ApiError[] {
     }, []);
   }
 
-  return [];
+  // Make sure to always return ApiError
+  return [new InternalServerError(errors.INTERNAL_ERROR, { detail: response })];
 }
 
 // Interfaces

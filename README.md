@@ -175,7 +175,7 @@ serializer.serialize([parsedError]);
 
 ### parseJsonErrors(object)
 
-Parse json object containing errors into javascript `ApiError` instances. Will return an array with all non-errors filtered out or empty array if no errors were found.
+Parse json object containing errors into javascript `ApiError` instances. Will return an array with all non-errors filtered out or default InternalServerError if no errors were found.
 
 ```javascript
   try {
