@@ -1,7 +1,7 @@
 import * as ev from 'express-validation';
 import * as _ from 'lodash';
 
-import { ApiError, ValidationError } from './errors';
+import { ApiError, ValidationError, InternalServerError } from './errors';
 import { errors } from '../config/errors.config';
 import { errorDefaults } from '../config/defaults.config';
 import { getTranslator } from './translator';
@@ -90,19 +90,20 @@ export function parseErrors(error: any = {}, translatorOptions?: TranslatorOptio
  * Parse json response containing errors into actual ApiError objects
  * @param {Object} response
  */
-export function parseJsonResponse<T>(response: any): ApiError[] | T {
+export function parseJsonErrors(response: any): ApiError[] {
   if ((response || {}).hasOwnProperty('errors') && Array.isArray(response.errors)) {
-    return response.errors.map((error: any) => {
+    return response.errors.reduce((acc: ApiError[], error: any) => {
       if (isApiError(error)) {
         const { status, code, title, detail, meta = {} } = error;
-        return new ApiError(status, { code, message: title }, { detail, stack: (meta || {}).stack });
+        return [...acc, new ApiError(status, { code, message: title }, { detail, stack: (meta || {}).stack })];
       }
 
-      return error;
-    });
+      return acc;
+    }, []);
   }
 
-  return response;
+  // Make sure to always return ApiError
+  return [new InternalServerError(errors.INTERNAL_ERROR, { detail: response })];
 }
 
 // Interfaces

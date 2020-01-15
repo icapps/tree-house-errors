@@ -2,7 +2,7 @@ import * as httpStatus from 'http-status';
 import { ValidationError } from 'express-validation';
 
 import * as translator from '../src/lib/translator';
-import { ApiError, errors, parseErrors, parseJsonResponse, isApiError } from '../src';
+import { ApiError, errors, parseErrors, parseJsonErrors, isApiError, InternalServerError } from '../src';
 import { errorDefaults } from '../src/config/defaults.config';
 
 describe('errorParser', () => {
@@ -220,9 +220,9 @@ describe('errorParser', () => {
     });
   });
 
-  describe('parseJsonResponse', () => {
+  describe('parseJsonErrors', () => {
     it('Should succesfully return parsed errors', () => {
-      const result = parseJsonResponse({
+      const result = parseJsonErrors({
         errors: [{
           status: httpStatus.BAD_REQUEST,
           code: 'MY_CODE',
@@ -231,7 +231,8 @@ describe('errorParser', () => {
           meta: {
             stack: 'Something wrong',
           },
-        }],
+        },
+        {}], // Should be filtered out
       });
 
       expect(result).toBeInstanceOf(Array);
@@ -249,7 +250,7 @@ describe('errorParser', () => {
     });
 
     it('Should succesfully return parsed errors with empty meta', () => {
-      const result = parseJsonResponse({
+      const result = parseJsonErrors({
         errors: [{
           status: httpStatus.BAD_REQUEST,
           code: 'MY_CODE',
@@ -274,7 +275,7 @@ describe('errorParser', () => {
     });
 
     it('Should succesfully return parsed errors without meta', () => {
-      const result = parseJsonResponse({
+      const result = parseJsonErrors({
         errors: [{
           status: httpStatus.BAD_REQUEST,
           code: 'MY_CODE',
@@ -297,14 +298,14 @@ describe('errorParser', () => {
       });
     });
 
-    it('Should return response object when contains no errors', () => {
-      expect(parseJsonResponse(null)).toEqual(null);
-      expect(parseJsonResponse([])).toEqual([]);
-      expect(parseJsonResponse({ errors: [] })).toEqual([]);
+    it('Should return internalServerError response when contains no errors', () => {
+      expect(parseJsonErrors(null)[0]).toBeInstanceOf(InternalServerError);
+      expect(parseJsonErrors([])[0]).toBeInstanceOf(InternalServerError);
+      expect(parseJsonErrors({ errors: [] })).toEqual([]);
     });
 
-    it('Should return same error when not all properties were found', () => {
-      const result = parseJsonResponse({
+    it('Should return empty error when not all properties were found', () => {
+      const result = parseJsonErrors({
         errors: [{
           status: httpStatus.BAD_REQUEST,
           detail: { key: 'Value Mister' },
@@ -315,16 +316,7 @@ describe('errorParser', () => {
       });
 
       expect(result).toBeInstanceOf(Array);
-      expect(result).toHaveLength(1);
-
-      expect(result[0]).not.toBeInstanceOf(ApiError);
-      expect(result[0]).toMatchObject({
-        status: httpStatus.BAD_REQUEST,
-        detail: { key: 'Value Mister' },
-        meta: {
-          stack: 'Something wrong',
-        },
-      });
+      expect(result).toHaveLength(0);
     });
   });
 });
