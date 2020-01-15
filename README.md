@@ -173,9 +173,9 @@ serializer.serialize([parsedError]);
 
 > The `parseErrors` function will load the i18n configuration once, and reuse the same instance afterwards. It is not possible to overwrite the configuration after the first call. This has to do with performance and caching of translations.
 
-### parseJsonResponse(object)
+### parseJsonErrors(object)
 
-Parse json object containing errors into javascript `ApiError` instances.
+Parse json object containing errors into javascript `ApiError` instances. Will return an array with all non-errors filtered out or empty array if no errors were found.
 
 ```javascript
   try {
@@ -191,8 +191,8 @@ Parse json object containing errors into javascript `ApiError` instances.
 
 ## Tests
 
-- You can run `yarn test` to run all tests
-- You can run `yarn test:coverage` to run all tests with coverage report
+- You can run `npm run test` to run all tests
+- You can run `npm run test:coverage` to run all tests with coverage report
 
 ## Bugs
 

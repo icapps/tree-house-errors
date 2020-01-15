@@ -90,19 +90,19 @@ export function parseErrors(error: any = {}, translatorOptions?: TranslatorOptio
  * Parse json response containing errors into actual ApiError objects
  * @param {Object} response
  */
-export function parseJsonResponse<T>(response: any): ApiError[] | T {
+export function parseJsonErrors(response: any): ApiError[] {
   if ((response || {}).hasOwnProperty('errors') && Array.isArray(response.errors)) {
-    return response.errors.map((error: any) => {
+    return response.errors.reduce((acc: ApiError[], error: any) => {
       if (isApiError(error)) {
         const { status, code, title, detail, meta = {} } = error;
-        return new ApiError(status, { code, message: title }, { detail, stack: (meta || {}).stack });
+        return [...acc, new ApiError(status, { code, message: title }, { detail, stack: (meta || {}).stack })];
       }
 
-      return error;
-    });
+      return acc;
+    }, []);
   }
 
-  return response;
+  return [];
 }
 
 // Interfaces
