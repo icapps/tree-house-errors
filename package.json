@@ -26,14 +26,14 @@
     "http-status": "~1.4.2",
     "i18n": "~0.8.4",
     "joi": "~14.3.1",
-    "safe-json-stringify": "1.2.0",
+    "safe-json-stringify": "~1.2.0",
     "tree-house-translations": "~1.2.2",
-    "uuid": "~3.3.3"
+    "uuid": "~3.4.0"
   },
   "devDependencies": {
     "@types/http-status": "~1.1.2",
     "@types/i18n": "~0.8.6",
-    "@types/jest": "~24.0.25",
+    "@types/jest": "24.9.0",
     "@types/uuid": "~3.4.6",
     "coveralls": "~3.0.9",
     "jest": "~24.9.0",

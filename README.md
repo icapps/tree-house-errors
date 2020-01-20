@@ -131,19 +131,33 @@ throw new ApiError(400, errors.BAD_REQUEST);
 
 ## Error parsing
 
-### isApiError(object)
+### isApiError(apiError)
 
-Will return boolean indicating whether object has all required properties to be an `ApiError`.
+Will return boolean indicating whether error is instance of `ApiError`.
 
 ```javascript
   // Will return true
-  isApiError({ status: 200, code: 'MY_CODE', title: 'MY_ERROR', detail: {} })
+  isApiError(new BadRequestError())
 
   // Will return false
-  isApiError({ status: 200, code: 'MY_CODE' })
+  isApiError(new Error('Something'))
 ```
 
 > Will automatically cast to ApiError if succeeds and using Typescript
+
+### isJsonApiError(object)
+
+Will return boolean indicating whether object has all required properties to be a parsed `ApiError`.
+
+```javascript
+  // Will return true
+  isJsonApiError({ status: 200, code: 'MY_CODE', title: 'MY_ERROR', detail: {} })
+
+  // Will return false
+  isJsonApiError({ status: 200, code: 'MY_CODE' })
+```
+
+> Will automatically cast to ParsedError if succeeds and using Typescript
 
 ### parseErrors(error, i18nOptions (optional))
 

@@ -11,11 +11,14 @@ import { getTranslator } from './translator';
  * Check if object has all required properties to be an ApiError
  * @param {Object} obj
  */
-export const isApiError = (obj: ParsedError | any = {}): obj is ParsedError =>
+export const isJsonApiError = (obj: ParsedError | any = {}): obj is ParsedError =>
   _.has(obj, 'status')
   && _.has(obj, 'code')
   && _.has(obj, 'title')
   && _.has(obj, 'detail');
+
+export const isApiError = (err: ApiError | any = {}): err is ApiError =>
+  (err || {}).hasOwnProperty('isApiError') && err.isApiError === true;
 
 /**
  * Parse errors
@@ -54,7 +57,7 @@ export function parseErrors(error: any = {}, translatorOptions?: TranslatorOptio
   }
 
   // Own thrown ApiErrors
-  if (error instanceof ApiError) {
+  if (isApiError(error)) {
     let translatedMessage = error.message;
 
     if (translatorOptions) {
@@ -94,7 +97,7 @@ export function parseErrors(error: any = {}, translatorOptions?: TranslatorOptio
 export function parseJsonErrors(response: any): ApiError[] {
   if ((response || {}).hasOwnProperty('errors') && Array.isArray(response.errors)) {
     return response.errors.reduce((acc: ApiError[], error: any) => {
-      if (isApiError(error)) {
+      if (isJsonApiError(error)) {
         const { status, code, title, detail, meta = {} } = error;
         return [...acc, new ApiError(status, { code, message: title }, { detail, stack: (meta || {}).stack })];
       }

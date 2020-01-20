@@ -2,7 +2,10 @@ import * as httpStatus from 'http-status';
 import { ValidationError } from 'express-validation';
 
 import * as translator from '../src/lib/translator';
-import { ApiError, errors, parseErrors, parseJsonErrors, isApiError, InternalServerError } from '../src';
+import {
+  ApiError, errors, parseErrors, parseJsonErrors, isJsonApiError, InternalServerError, BadRequestError, isApiError, UnauthorizedError,
+  ForbiddenError,
+} from '../src';
 import { errorDefaults } from '../src/config/defaults.config';
 
 describe('errorParser', () => {
@@ -111,7 +114,7 @@ describe('errorParser', () => {
     it('Should succesfully parse default ApiError with default message when language is not available', () => {
       expect.assertions(1);
       try {
-        throw new ApiError(httpStatus.BAD_REQUEST, errors.INVALID_INPUT);
+        throw new BadRequestError(errors.INVALID_INPUT);
       } catch (err) {
         const parsedError = parseErrors(err, { path: '', language: 'du' });
         expect(parsedError).toMatchObject({
@@ -182,7 +185,7 @@ describe('errorParser', () => {
 
     it('Should parse celebrate joi error without ValidationError', () => {
       const celebrateError = {
-        joi: {},
+        joi: null,
       };
 
       const parsedError = parseErrors(celebrateError);
@@ -197,9 +200,9 @@ describe('errorParser', () => {
     });
   });
 
-  describe('isApiError', () => {
+  describe('isJsonApiError', () => {
     it('Should return true when all properties are available', () => {
-      const output = isApiError({
+      const output = isJsonApiError({
         status: httpStatus.BAD_REQUEST,
         code: 'RANDOM_CODE',
         title: 'My title',
@@ -212,11 +215,29 @@ describe('errorParser', () => {
     });
 
     it('Should return false when some properties are missing', () => {
+      expect(isJsonApiError()).toEqual(false);
+      expect(isJsonApiError({})).toEqual(false);
+      expect(isJsonApiError({ status: httpStatus.NOT_ACCEPTABLE, code: '120', title: 'any Title' })).toEqual(false);
+      expect(isJsonApiError({ status: httpStatus.INTERNAL_SERVER_ERROR, code: '120', detail: 'any Title' })).toEqual(false);
+      expect(isJsonApiError({ code: '120', detail: 'any Title' })).toEqual(false);
+      expect(isJsonApiError({ status: httpStatus.BAD_REQUEST, detail: 'any Title' })).toEqual(false);
+    });
+  });
+
+  describe('isApiError', () => {
+    it('Should return true when all properties are available', () => {
+      expect(isApiError(new BadRequestError())).toEqual(true);
+      expect(isApiError(new ApiError(401, errors.AUTHENTICATION_FAILED))).toEqual(true);
+      expect(isApiError(new InternalServerError())).toEqual(true);
+      expect(isApiError(new UnauthorizedError())).toEqual(true);
+      expect(isApiError(new ForbiddenError())).toEqual(true);
+    });
+
+    it('Should return false when some properties are missing', () => {
+      expect(isApiError()).toEqual(false);
       expect(isApiError({})).toEqual(false);
-      expect(isApiError({ status: httpStatus.NOT_ACCEPTABLE, code: '120', title: 'any Title' })).toEqual(false);
-      expect(isApiError({ status: httpStatus.INTERNAL_SERVER_ERROR, code: '120', detail: 'any Title' })).toEqual(false);
-      expect(isApiError({ code: '120', detail: 'any Title' })).toEqual(false);
-      expect(isApiError({ status: httpStatus.BAD_REQUEST, detail: 'any Title' })).toEqual(false);
+      expect(isApiError(null)).toEqual(false);
+      expect(isApiError(new Error('SOMETHING WRONG'))).toEqual(false);
     });
   });
 
