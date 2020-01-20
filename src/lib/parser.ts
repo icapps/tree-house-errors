@@ -1,5 +1,6 @@
 import * as ev from 'express-validation';
 import * as _ from 'lodash';
+import * as safeJsonStringify from 'safe-json-stringify';
 
 import { ApiError, ValidationError, InternalServerError } from './errors';
 import { errors } from '../config/errors.config';
@@ -27,7 +28,7 @@ export function parseErrors(error: any = {}, translatorOptions?: TranslatorOptio
 
   // Other errors
   if (error instanceof Error) {
-    Object.assign(metaData, { stack: JSON.stringify(error.stack) });
+    Object.assign(metaData, { stack: safeJsonStringify(error.stack) });
 
     if (error.hasOwnProperty('schema') && error.hasOwnProperty('detail')) { // knex.js specific errors
       const errorData = <any>error;
