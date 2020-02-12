@@ -233,8 +233,19 @@ describe('errorParser', () => {
       expect(isApiError(new ForbiddenError())).toEqual(true);
     });
 
+    it('Should return true when matches a specific error', () => {
+      const errorType = { code: 'MY_ERROR', message: 'MY_MESSAGE' };
+      const input = new BadRequestError(errorType);
+      expect(isApiError(input, errorType)).toEqual(true);
+    });
+
+    it('Should return false when does not match a specific error', () => {
+      const errorType = { code: 'MY_ERROR', message: 'MY_MESSAGE' };
+      const input = new BadRequestError(errorType);
+      expect(isApiError(input, { code: 'OTHER_CODE', message: 'MY_MESSAGE' })).toEqual(false);
+    });
+
     it('Should return false when some properties are missing', () => {
-      expect(isApiError()).toEqual(false);
       expect(isApiError({})).toEqual(false);
       expect(isApiError(null)).toEqual(false);
       expect(isApiError(new Error('SOMETHING WRONG'))).toEqual(false);

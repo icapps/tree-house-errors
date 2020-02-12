@@ -131,9 +131,10 @@ throw new ApiError(400, errors.BAD_REQUEST);
 
 ## Error parsing
 
-### isApiError(apiError)
+### isApiError(apiError, type?)
 
 Will return boolean indicating whether error is instance of `ApiError`.
+Can also be used to provide an extra check matching a specific error type (will only match code, not message)
 
 ```javascript
   // Will return true
@@ -141,6 +142,9 @@ Will return boolean indicating whether error is instance of `ApiError`.
 
   // Will return false
   isApiError(new Error('Something'))
+
+  // Will return true
+  isApiError(new BadRequestError(errors.MY_CUSTOM_ERROR), errors.MY_CUSTOM_ERROR)
 ```
 
 > Will automatically cast to ApiError if succeeds and using Typescript

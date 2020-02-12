@@ -2,7 +2,7 @@ import * as ev from 'express-validation';
 import * as _ from 'lodash';
 import * as safeJsonStringify from 'safe-json-stringify';
 
-import { ApiError, ValidationError, InternalServerError } from './errors';
+import { ApiError, ValidationError, InternalServerError, ErrorType } from './errors';
 import { errors } from '../config/errors.config';
 import { errorDefaults } from '../config/defaults.config';
 import { getTranslator } from './translator';
@@ -17,8 +17,22 @@ export const isJsonApiError = (obj: ParsedError | any = {}): obj is ParsedError 
   && _.has(obj, 'title')
   && _.has(obj, 'detail');
 
-export const isApiError = (err: ApiError | any = {}): err is ApiError =>
-  (err || {}).hasOwnProperty('isApiError') && err.isApiError === true;
+  /**
+   * Check if object is an ApiError instance
+   * Optionally check whether it matches a specific error
+   * @param err
+   * @param type
+   */
+export const isApiError = (err: ApiError | any, type?: ErrorType): err is ApiError => {
+  const isError = (err || {}).hasOwnProperty('isApiError') && err.isApiError === true;
+
+  if (isError) {
+    if (!type) return true;
+    return err.code === type.code;
+  }
+
+  return false;
+};
 
 /**
  * Parse errors
