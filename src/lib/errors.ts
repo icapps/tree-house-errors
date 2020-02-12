@@ -25,6 +25,13 @@ export class ApiError extends Error {
   }
 }
 
+export class GenericError extends ApiError {
+  constructor(error?: ErrorType, args?: ErrorArgs) {
+    super(0, error == null ? errors.GENERIC_ERROR : error, args);
+    this.name = 'GenericError';
+  }
+}
+
 export class BadRequestError extends ApiError {
   constructor(error?: ErrorType, args?: ErrorArgs) {
     super(httpStatus.BAD_REQUEST, error == null ? errors.BAD_REQUEST : error, args);

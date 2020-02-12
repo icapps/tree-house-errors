@@ -44,9 +44,19 @@ const optionalArgs = {
 throw new ApiError(400, error, optionalArgs);
 ```
 
+### GenericError
+
+Extends from ApiError with a preset of status code 0 and GENERIC_ERROR as error.
+This should be used when it's internal without needing an actual status code.
+
+```javascript
+throw new GenericError(); // or
+throw new GenericError(error, optionalArgs);
+```
+
 ### BadRequestError
 
-extends from ApiError with a preset of status code 400 and BAD_REQUEST as error.
+Extends from ApiError with a preset of status code 400 and BAD_REQUEST as error.
 
 ```javascript
 throw new BadRequestError(); // or
@@ -55,7 +65,7 @@ throw new BadRequestError(error, optionalArgs);
 
 ### NotFoundError
 
-extends from ApiError with a preset of status code 404 and RESOURCE_NOT_FOUND as error.
+Extends from ApiError with a preset of status code 404 and RESOURCE_NOT_FOUND as error.
 
 ```javascript
 throw new NotFoundError(); // or
@@ -64,7 +74,7 @@ throw new NotFoundError(error, optionalArgs);
 
 ### ForbiddenError
 
-extends from ApiError with a preset of status code 403 and FORBIDDEN as error.
+Extends from ApiError with a preset of status code 403 and FORBIDDEN as error.
 
 ```javascript
 throw new ForbiddenError(); // or
@@ -73,7 +83,7 @@ throw new ForbiddenError(error, optionalArgs);
 
 ### InternalServerError
 
-extends from ApiError with a preset of status code 500 and INTERNAL_ERROR as error.
+Extends from ApiError with a preset of status code 500 and INTERNAL_ERROR as error.
 
 ```javascript
 throw new InternalServerError(); // or
@@ -82,7 +92,7 @@ throw new InternalServerError(error, optionalArgs);
 
 ### UnauthorizedError
 
-extends from ApiError with a preset of status code 401 and UNAUTHORIZED as error.
+Extends from ApiError with a preset of status code 401 and UNAUTHORIZED as error.
 
 ```javascript
 throw new UnauthorizedError(); // or
@@ -91,7 +101,7 @@ throw new UnauthorizedError(error, optionalArgs);
 
 ### ValidationError
 
-extends from ApiError with a preset of status code 400 and INVALID_INPUT as error.
+Extends from ApiError with a preset of status code 400 and INVALID_INPUT as error.
 
 ```javascript
 throw new ValidationError(); // or
@@ -100,7 +110,7 @@ throw new ValidationError(error, optionalArgs);
 
 ### AuthenticationError
 
-extends from ApiError with a preset of status code 400 and AUTHENTICATION_FAILED as error.
+Extends from ApiError with a preset of status code 400 and AUTHENTICATION_FAILED as error.
 
 ```javascript
 throw new AuthenticationError(); // or

@@ -9,6 +9,7 @@ import {
   UnauthorizedError,
   ValidationError,
   AuthenticationError,
+  GenericError,
 } from '../src';
 
 describe('errors', () => {
@@ -46,6 +47,42 @@ describe('errors', () => {
         expect(error.toString()).toEqual('ApiError: Error with a custom message');
         expect(error.stack).not.toBeNull();
         expect(error.detail).toEqual({ badFormatFields: { name: 'email' } });
+      }
+    });
+  });
+
+  describe('GenericError', () => {
+    it('Should throw a GenericError with default arguments', () => {
+      try {
+        throw new GenericError();
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect(error).toBeInstanceOf(GenericError);
+        expect(error.name).toEqual('GenericError');
+        expect(error.id).toEqual(expect.any(String));
+        expect(error.toString()).toEqual(`GenericError: ${errors.GENERIC_ERROR.message}`);
+        expect(error.stack).not.toBeNull();
+        expect(error.detail).toBeUndefined();
+      }
+    });
+
+    it('Should throw an InternalServerError with custom error', () => {
+      const args = {
+        code: 'CUSTOM_CODE',
+        message: 'Error with a custom message',
+      };
+
+      try {
+        throw new GenericError(args);
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect(error).toBeInstanceOf(GenericError);
+        expect(error.name).toEqual('GenericError');
+        expect(error.code).toEqual(args.code);
+        expect(error.id).toEqual(expect.any(String));
+        expect(error.toString()).toEqual('GenericError: Error with a custom message');
+        expect(error.stack).not.toBeNull();
+        expect(error.detail).toBeUndefined();
       }
     });
   });
