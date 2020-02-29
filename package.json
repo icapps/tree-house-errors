@@ -22,7 +22,7 @@
     "build"
   ],
   "dependencies": {
-    "express-validation": "1.0.2",
+    "express-validation": "2.0.0",
     "http-status": "~1.4.2",
     "i18n": "~0.8.5",
     "joi": "~14.3.1",
