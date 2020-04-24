@@ -35,7 +35,7 @@
     "@types/i18n": "~0.8.6",
     "@types/jest": "~25.1.2",
     "@types/uuid": "~3.4.7",
-    "coveralls": "~3.0.9",
+    "coveralls": "~3.1.0",
     "jest": "~25.1.0",
     "np": "~6.0.0",
     "pre-commit": "~1.2.2",
