@@ -23,9 +23,10 @@ yarn add @icapps/tree-house-errors
 
 ## Error types
 
-### ApiError
+### ApiError<T>
 
 Base error class which extends from the `Error` class.
+`ApiError` accepts a generic `T` for the `details` property; if not specified, it defaults to `any`.
 
 ```javascript
 // All keys are required
