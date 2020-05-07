@@ -3,15 +3,15 @@ import * as httpStatus from 'http-status';
 
 import { errors } from '../config/errors.config';
 
-export class ApiError extends Error {
+export class ApiError<T = any> extends Error {
   code: string;
   status: number;
   i18n?: string;
   id?: string;
-  detail?: any;
+  detail?: T;
   isApiError: boolean;
 
-  constructor(status: number, error: ErrorType, args: { message?: string, detail?: any, stack?: any } = {}) {
+  constructor(status: number, error: ErrorType, args: { message?: string, detail?: T, stack?: any } = {}) {
     const { message, detail, stack } = args;
     super(message || error.message);
     this.name = 'ApiError';
