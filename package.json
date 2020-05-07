@@ -24,27 +24,27 @@
   "dependencies": {
     "express-validation": "1.0.2",
     "http-status": "~1.4.2",
-    "i18n": "~0.8.5",
+    "i18n": "0.9.1",
     "joi": "~14.3.1",
     "safe-json-stringify": "~1.2.0",
     "tree-house-translations": "~1.2.2",
-    "uuid": "~3.4.0"
+    "uuid": "8.0.0"
   },
   "devDependencies": {
     "@types/http-status": "~1.1.2",
     "@types/i18n": "~0.8.6",
-    "@types/jest": "~25.1.2",
-    "@types/uuid": "~3.4.7",
-    "coveralls": "~3.0.9",
+    "@types/jest": "25.2.1",
+    "@types/uuid": "7.0.3",
+    "coveralls": "3.1.0",
     "jest": "~25.1.0",
     "np": "~6.0.0",
     "pre-commit": "~1.2.2",
     "rimraf": "~3.0.2",
     "supertest": "~4.0.2",
-    "ts-jest": "~25.2.0",
-    "tslint": "~6.0.0",
+    "ts-jest": "25.5.0",
+    "tslint": "6.1.2",
     "tslint-config-airbnb": "~5.11.2",
-    "typescript": "~3.7.4"
+    "typescript": "3.8.3"
   },
   "peerDependencies": {
     "express": "4.x"
