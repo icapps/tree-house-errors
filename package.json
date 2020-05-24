@@ -24,7 +24,7 @@
   "dependencies": {
     "express-validation": "1.0.2",
     "http-status": "~1.4.2",
-    "i18n": "0.9.1",
+    "i18n": "0.10.0",
     "joi": "~14.3.1",
     "safe-json-stringify": "~1.2.0",
     "tree-house-translations": "~1.2.2",
