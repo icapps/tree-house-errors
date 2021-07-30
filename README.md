@@ -4,7 +4,7 @@ Custom NodeJS error classes and definitions with an error parser utility functio
 
 [![npm version](https://badge.fury.io/js/tree-house-errors.svg)](https://badge.fury.io/js/tree-house-errors)
 [![Dependencies](https://david-dm.org/icapps/tree-house-errors.svg)](https://david-dm.org/icapps/tree-house-errors.svg)
-[![Build Status](https://travis-ci.org/icapps/tree-house-errors.svg?branch=master)](https://travis-ci.org/icapps/tree-house-errors)
+[![Build Status](https://travis-ci.com/icapps/tree-house-errors.svg?branch=master)](https://travis-ci.com/icapps/tree-house-errors)
 [![Coverage Status](https://coveralls.io/repos/github/icapps/tree-house-errors/badge.svg)](https://coveralls.io/github/icapps/tree-house-errors) [![Greenkeeper badge](https://badges.greenkeeper.io/icapps/tree-house-errors.svg)](https://greenkeeper.io/)
 
 ## Installation
