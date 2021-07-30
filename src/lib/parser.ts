@@ -1,4 +1,3 @@
-import * as ev from 'express-validation';
 import * as _ from 'lodash';
 import * as safeJsonStringify from 'safe-json-stringify';
 
@@ -54,9 +53,9 @@ export function parseErrors(error: any = {}, translatorOptions?: TranslatorOptio
   }
 
   // Express middleware validation errors
-  if (error instanceof ev.ValidationError) {
+  if (error.name === 'ValidationError') {
     parsedError = new ValidationError(errors.INVALID_INPUT, {
-      detail: error.errors,
+      detail: error.details,
     });
   }
 

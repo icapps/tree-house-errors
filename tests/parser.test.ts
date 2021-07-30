@@ -1,5 +1,5 @@
 import * as httpStatus from 'http-status';
-import { ValidationError } from 'express-validation';
+import * as ValidationError from 'express-validation/lib/validation-error';
 
 import * as translator from '../src/lib/translator';
 import {
@@ -59,7 +59,7 @@ describe('errorParser', () => {
   describe('Express Validation errors', () => {
     const options = {
       flatten: false,
-      status: 400,
+      statusCode: 400,
       statusText: 'Validation...',
     };
 
