@@ -76,7 +76,7 @@ export function parseErrors(error: any = {}, translatorOptions?: TranslatorOptio
     if (translatorOptions) {
       const translator = getTranslator(translatorOptions.path, translatorOptions.defaultLocale);
       try {
-        translatedMessage = translator.translate(error.i18n);
+        translatedMessage = translator.translate(error.i18n, translatorOptions?.language);
       } catch (_error) {
         // If language file was not found set text to default message
         translatedMessage = error.message;
