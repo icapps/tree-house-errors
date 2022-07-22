@@ -11,19 +11,16 @@ import { getTranslator } from './translator';
  * @param {Object} obj
  */
 export const isJsonApiError = (obj: ParsedError | any = {}): obj is ParsedError =>
-  _.has(obj, 'status')
-  && _.has(obj, 'code')
-  && _.has(obj, 'title')
-  && _.has(obj, 'detail');
+  _.has(obj, 'status') && _.has(obj, 'code') && _.has(obj, 'title') && _.has(obj, 'detail');
 
-  /**
-   * Check if object is an ApiError instance
-   * Optionally check whether it matches a specific error
-   * @param err
-   * @param type
-   */
+/**
+ * Check if object is an ApiError instance
+ * Optionally check whether it matches a specific error
+ * @param err
+ * @param type
+ */
 export const isApiError = (err: ApiError | any, type?: ErrorType): err is ApiError => {
-  const isError = (err || {}).hasOwnProperty('isApiError') && err.isApiError === true;
+  const isError = Object.getOwnPropertyDescriptor(err || {}, 'isApiError') && err.isApiError === true;
 
   if (isError) {
     if (!type) return true;
@@ -46,7 +43,8 @@ export function parseErrors(error: any = {}, translatorOptions?: TranslatorOptio
   if (error instanceof Error) {
     Object.assign(metaData, { stack: safeJsonStringify(error.stack) });
 
-    if (error.hasOwnProperty('schema') && error.hasOwnProperty('detail')) { // knex.js specific errors
+    if (Object.getOwnPropertyDescriptor(error, 'schema') && Object.getOwnPropertyDescriptor(error, 'detail')) {
+      // knex.js specific errors
       const errorData = <any>error;
       Object.assign(metaData, errorData);
     }
@@ -60,7 +58,7 @@ export function parseErrors(error: any = {}, translatorOptions?: TranslatorOptio
   }
 
   // Celebrate middleware validation errors
-  if (error.hasOwnProperty('joi')) {
+  if (Object.getOwnPropertyDescriptor(error, 'joi')) {
     const { isJoi = false, details } = error.joi || {};
     if (isJoi) {
       parsedError = new ValidationError(errors.INVALID_INPUT, {
@@ -108,8 +106,8 @@ export function parseErrors(error: any = {}, translatorOptions?: TranslatorOptio
  * @param {Object} response
  */
 export function parseJsonErrors(response: any): ApiError[] {
-  if ((response || {}).hasOwnProperty('errors') && Array.isArray(response.errors)) {
-    return response.errors.reduce((acc: ApiError[], error: any) => {
+  if (Object.getOwnPropertyDescriptor(response || {}, 'errors') && Array.isArray(response.errors)) {
+    return response.errors.reduce((acc: ApiError[], error: ParsedError) => {
       if (isJsonApiError(error)) {
         const { status, code, title, detail, meta = {} } = error;
         return [...acc, new ApiError(status, { code, message: title }, { detail, stack: (meta || {}).stack })];

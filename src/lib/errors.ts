@@ -11,7 +11,7 @@ export class ApiError<T = any> extends Error {
   detail?: T;
   isApiError: boolean;
 
-  constructor(status: number, error: ErrorType, args: { message?: string, detail?: T, stack?: any } = {}) {
+  constructor(status: number, error: ErrorType, args: { message?: string; detail?: T; stack?: any } = {}) {
     const { message, detail, stack } = args;
     super(message || error.message);
     this.name = 'ApiError';
@@ -60,7 +60,7 @@ export class InternalServerError<T = any> extends ApiError<T> {
   }
 }
 
-export class UnauthorizedError<T = any>  extends ApiError<T> {
+export class UnauthorizedError<T = any> extends ApiError<T> {
   constructor(error?: ErrorType, args?: ErrorArgs<T>) {
     super(httpStatus.UNAUTHORIZED, error == null ? errors.UNAUTHORIZED : error, args);
     this.name = 'UnauthorizedError';

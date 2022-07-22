@@ -5,4 +5,5 @@ import * as icappsTranslation from 'tree-house-translations';
  * @param {String} path
  * @param {String} [defaultLocale]
  */
-export const getTranslator = (path: string, defaultLocale?: string) => icappsTranslation.initTranslator(path, defaultLocale);
+export const getTranslator = (path: string, defaultLocale?: string) =>
+  icappsTranslation.initTranslator(path, defaultLocale);
