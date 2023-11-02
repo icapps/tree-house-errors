@@ -38,6 +38,7 @@ describe('errors', () => {
             },
           },
           stack: 'Something went wrong for...',
+          status: 503,
         });
       } catch (error) {
         expect(error).toBeInstanceOf(Error);
@@ -46,6 +47,7 @@ describe('errors', () => {
         expect(error.id).toEqual(expect.any(String));
         expect(error.toString()).toEqual('ApiError: Error with a custom message');
         expect(error.stack).not.toBeNull();
+        expect(error.status).toEqual(503);
         expect(error.detail).toEqual({ badFormatFields: { name: 'email' } });
       }
     });
@@ -66,7 +68,7 @@ describe('errors', () => {
       }
     });
 
-    it('Should throw an InternalServerError with custom error', () => {
+    it('Should throw an GenericError with custom error', () => {
       const args = {
         code: 'CUSTOM_CODE',
         message: 'Error with a custom message',
@@ -83,6 +85,27 @@ describe('errors', () => {
         expect(error.toString()).toEqual('GenericError: Error with a custom message');
         expect(error.stack).not.toBeNull();
         expect(error.detail).toBeUndefined();
+      }
+    });
+
+    it('Should throw an GenericError with custom status', () => {
+      const args = {
+        code: 'CUSTOM_CODE',
+        message: 'Error with a custom message with custom status',
+      };
+
+      try {
+        throw new GenericError(args, { status: 503 });
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect(error).toBeInstanceOf(GenericError);
+        expect(error.name).toEqual('GenericError');
+        expect(error.code).toEqual(args.code);
+        expect(error.id).toEqual(expect.any(String));
+        expect(error.toString()).toEqual('GenericError: Error with a custom message with custom status');
+        expect(error.stack).not.toBeNull();
+        expect(error.detail).toBeUndefined();
+        expect(error.status).toEqual(503);
       }
     });
   });

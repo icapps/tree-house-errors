@@ -11,15 +11,19 @@ export class ApiError<T = any> extends Error {
   detail?: T;
   isApiError: boolean;
 
-  constructor(status: number, error: ErrorType, args: { message?: string; detail?: T; stack?: any } = {}) {
-    const { message, detail, stack } = args;
+  constructor(
+    status: number,
+    error: ErrorType,
+    args: { message?: string; detail?: T; stack?: any; status?: number } = {},
+  ) {
+    const { message, detail, stack, status: customStatus } = args;
     super(message || error.message);
     this.name = 'ApiError';
     this.isApiError = true;
     this.id = uuid.v1();
     this.code = error.code;
     this.i18n = error.i18n;
-    this.status = status;
+    this.status = customStatus || status;
     this.detail = detail;
     if (stack) this.stack = stack;
   }
